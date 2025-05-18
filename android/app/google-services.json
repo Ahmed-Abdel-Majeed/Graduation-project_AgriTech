@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "42040448948",
+    "project_id": "agritechx-a1165",
+    "storage_bucket": "agritechx-a1165.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:42040448948:android:5897ef03ab7c37cecd04e1",
+        "android_client_info": {
+          "package_name": "com.example.agri"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2CEE8jP9yeJM1gLGhRaA4yuBZlWQNo4g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
