@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../domain/models/control_types.dart';
+import '../../domain/models/ph_control_type.dart';
+import '../../domain/models/dose_types.dart';
+import 'render_ai_control_mode_switch.dart';
 
 class PHControlCard extends StatefulWidget {
   final PHControlType controlHandler;
   final void Function(PHControlType) setControlHandler;
   final bool isLoading;
-  final int doseCountdown; // seconds remaining
+  final int doseCountdown;
   final void Function(DoseType type, double amount) setDoseHandler;
   final VoidCallback cancelDoseHandler;
   final PendingDoseOrder? pendingDoseOrder;
@@ -24,12 +26,17 @@ class PHControlCard extends StatefulWidget {
   });
 
   @override
-  _PHControlCardState createState() => _PHControlCardState();
+  PHControlCardState createState() => PHControlCardState();
 }
 
-class _PHControlCardState extends State<PHControlCard> {
+class PHControlCardState extends State<PHControlCard> {
   double doseUpAmount = 0;
   double doseDownAmount = 0;
+
+  late TextEditingController doseUpController;
+  late TextEditingController doseDownController;
+  late TextEditingController minController;
+  late TextEditingController maxController;
 
   String formatTime(int seconds) {
     final mins = seconds ~/ 60;
@@ -45,14 +52,42 @@ class _PHControlCardState extends State<PHControlCard> {
         break;
       case 'min':
         updated = widget.controlHandler.copyWith(min: value);
+        minController.text = value.toStringAsFixed(1);
         break;
       case 'max':
         updated = widget.controlHandler.copyWith(max: value);
+        maxController.text = value.toStringAsFixed(1);
         break;
       default:
         updated = widget.controlHandler;
     }
     widget.setControlHandler(updated);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    doseUpController = TextEditingController(
+      text: doseUpAmount.toStringAsFixed(1),
+    );
+    doseDownController = TextEditingController(
+      text: doseDownAmount.toStringAsFixed(1),
+    );
+    minController = TextEditingController(
+      text: widget.controlHandler.min.toStringAsFixed(1),
+    );
+    maxController = TextEditingController(
+      text: widget.controlHandler.max.toStringAsFixed(1),
+    );
+  }
+
+  @override
+  void dispose() {
+    doseUpController.dispose();
+    doseDownController.dispose();
+    minController.dispose();
+    maxController.dispose();
+    super.dispose();
   }
 
   @override
@@ -62,6 +97,8 @@ class _PHControlCardState extends State<PHControlCard> {
       setState(() {
         doseUpAmount = 0;
         doseDownAmount = 0;
+        doseUpController.text = '0.0';
+        doseDownController.text = '0.0';
       });
     }
   }
@@ -71,61 +108,77 @@ class _PHControlCardState extends State<PHControlCard> {
     final control = widget.controlHandler;
     final pendingOrder = widget.pendingDoseOrder;
 
-    return Card(
-      child: Padding(
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          'pH Control',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+        ),
+      ),
+      body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header row with title and AI switch
+            SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Chip(
+                  label: Text(
+                    'Current pH: ${control.currentValue.toStringAsFixed(2)}',
+                  ),
+                ),
                 Row(
-                  children: const [
-                    Icon(Icons.science, size: 24),
-                    SizedBox(width: 8),
-                    Text(
-                      'pH Control',
+                  children: [
+                    const Text(
+                      "Manual",
                       style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Switch(
+                      value: control.isControlledByAI,
+                      onChanged:
+                          widget.isLoading
+                              ? null
+                              : (val) => handleChange(
+                                field: 'isControlledByAI',
+                                value: val,
+                              ),
+                    ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      "AI",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
                 ),
-                Switch(
-                  value: control.isControlledByAI,
-                  onChanged: widget.isLoading
-                      ? null
-                      : (val) =>
-                          handleChange(field: 'isControlledByAI', value: val),
-                ),
               ],
             ),
-            const Divider(height: 20),
-
-            // Current pH Chip
-            Chip(
-              label: Text(
-                'Current pH: ${control.currentValue.toStringAsFixed(2)}',
-              ),
-            ),
-
             const SizedBox(height: 16),
             const Text(
               'Set pH Range',
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
-
+            const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
                   child: TextField(
+                    controller: minController,
                     enabled: !control.isControlledByAI && !widget.isLoading,
                     decoration: const InputDecoration(
                       labelText: 'Min pH',
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      ),
                       isDense: true,
                     ),
                     keyboardType: const TextInputType.numberWithOptions(
@@ -135,18 +188,18 @@ class _PHControlCardState extends State<PHControlCard> {
                       final v = double.tryParse(val) ?? control.min;
                       handleChange(field: 'min', value: v);
                     },
-                    controller: TextEditingController(
-                      text: control.min.toStringAsFixed(1),
-                    ),
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: TextField(
+                    controller: maxController,
                     enabled: !control.isControlledByAI && !widget.isLoading,
                     decoration: const InputDecoration(
                       labelText: 'Max pH',
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      ),
                       isDense: true,
                     ),
                     keyboardType: const TextInputType.numberWithOptions(
@@ -156,8 +209,67 @@ class _PHControlCardState extends State<PHControlCard> {
                       final v = double.tryParse(val) ?? control.max;
                       handleChange(field: 'max', value: v);
                     },
-                    controller: TextEditingController(
-                      text: control.max.toStringAsFixed(1),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              onPressed:
+                  (control.isControlledByAI || widget.isLoading)
+                      ? null
+                      : () {
+                        // Add save logic if needed
+                      },
+              child: const Text('Save pH Range'),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Manual Dosing',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: doseUpController,
+                    enabled: !widget.disabled && pendingOrder == null,
+                    decoration: const InputDecoration(
+                      labelText: 'pH Up Amount (mL)',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      ),
+                      isDense: true,
+                    ),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    onChanged: (val) {
+                      setState(() {
+                        doseUpAmount = double.tryParse(val) ?? 0;
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(width: 12),
+                // FIX: Wrap in Flexible or give fixed width
+                SizedBox(
+                  width: 160,
+                  child: ElevatedButton(
+                    onPressed:
+                        (!widget.disabled &&
+                                pendingOrder == null &&
+                                doseUpAmount > 0)
+                            ? () =>
+                                widget.setDoseHandler(DoseType.up, doseUpAmount)
+                            : null,
+                    child: const Text(
+                      'Schedule pH UP',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -165,71 +277,63 @@ class _PHControlCardState extends State<PHControlCard> {
             ),
 
             const SizedBox(height: 12),
-            ElevatedButton(
-              onPressed: (control.isControlledByAI || widget.isLoading)
-                  ? null
-                  : () {
-                      // Save pH range button pressed
-                      // Implement your save logic here
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: doseDownController,
+                    enabled: !widget.disabled && pendingOrder == null,
+                    decoration: const InputDecoration(
+                      labelText: 'pH Down Amount (mL)',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      ),
+                      isDense: true,
+                    ),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    onChanged: (val) {
+                      setState(() {
+                        doseDownAmount = double.tryParse(val) ?? 0;
+                      });
                     },
-              child: const Text('Save pH Range'),
-            ),
-
-            const Divider(height: 32),
-
-            const Text(
-              'Manual Dosing',
-              style: TextStyle(fontWeight: FontWeight.w600),
-            ),
-
-            if (pendingOrder != null)
-              Container(
-                margin: const EdgeInsets.only(top: 16),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.orange.shade700,
-                    style: BorderStyle.solid,
-                    width: 1.5,
                   ),
-                  borderRadius: BorderRadius.circular(8),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Pending Order: ${pendingOrder.amount} mL pH ${pendingOrder.type == DoseType.up ? "UP" : "DOWN"}',
+                const SizedBox(width: 12),
+                SizedBox(
+                  width: 160,
+                  child: ElevatedButton(
+                    onPressed:
+                        (!widget.disabled &&
+                                pendingOrder == null &&
+                                doseDownAmount > 0)
+                            ? () => widget.setDoseHandler(
+                              DoseType.down,
+                              doseDownAmount,
+                            )
+                            : null,
+                    child: const Text(
+                      'Schedule pH DOWN',
                       style: TextStyle(
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
-                        color: Colors.orange.shade900,
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Hardware execution scheduled in approx. 10 mins. Cancel within:',
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Text(
-                          formatTime(widget.doseCountdown),
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        ElevatedButton(
-                          onPressed: widget.isLoading
-                              ? null
-                              : widget.cancelDoseHandler,
-                          child: const Text('Cancel'),
-                        ),
-                      ],
-                    ),
-                  ],
+                  ),
                 ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Note: Dosing commands are sent to hardware after a 10-minute delay, allowing cancellation.',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                fontStyle: FontStyle.italic,
+                color: Colors.black54,
               ),
+            ),
           ],
         ),
       ),

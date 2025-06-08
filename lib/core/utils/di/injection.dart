@@ -1,8 +1,8 @@
-import 'package:agri/cubit/sensor/sensor_cubit.dart';
-import 'package:agri/data/repositories/device_repository.dart';
+import 'package:agri/features/main/sensor/sensor_cubit.dart';
 import 'package:agri/data/repositories/sensor_repository.dart';
 import 'package:agri/features/auth/presentation/cuibt/auth_cubit.dart';
-import 'package:agri/service/api_service.dart';
+import 'package:agri/features/main/service/api_service.dart';
+import 'package:agri/core/network/app_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
@@ -12,38 +12,40 @@ import '../../../features/auth/data/repositories/user_repository_impl.dart';
 final getIt = GetIt.instance;
 
 void setupDependencies() {
-  // Registering Dio
-  getIt.registerLazySingleton<Dio>(() => createAndSetupDio());
+  if (!getIt.isRegistered<Dio>()) {
+    getIt.registerLazySingleton<Dio>(() {
+      final dio = Dio();
+      dio.interceptors.add(AppInterceptors());
+      dio.options.connectTimeout = const Duration(seconds: 50);
+      dio.options.receiveTimeout = const Duration(seconds: 50);
+      return dio;
+    });
+  }
 
-  // Registering ApiService
-  getIt.registerLazySingleton<ApiService>(() => ApiService(getIt<Dio>()));
+  if (!getIt.isRegistered<ApiService>()) {
+    getIt.registerLazySingleton<ApiService>(() => ApiService(getIt<Dio>()));
+  }
 
-  // Registering Repositories
-  getIt.registerLazySingleton<UserRepository>(() => UserRepositoryImpl(getIt<Dio>()));
-  getIt.registerLazySingleton<DeviceRepository>(() => DeviceRepository(getIt<Dio>()));
-  getIt.registerLazySingleton<SensorRepository>(() => SensorRepository(getIt<Dio>()));
+  if (!getIt.isRegistered<UserRepository>()) {
+    getIt.registerLazySingleton<UserRepository>(
+      () => UserRepositoryImpl(getIt<Dio>()),
+    );
+  }
 
-  // Registering Cubits
-  getIt.registerFactory<AuthCubit>(() => AuthCubit(getIt<UserRepository>()));
-  getIt.registerFactory<SensorCubit>(() => SensorCubit(getIt<SensorRepository>()));
-}
 
-Dio createAndSetupDio() {
-  Dio dio = Dio();
+  if (!getIt.isRegistered<SensorRepository>()) {
+    getIt.registerLazySingleton<SensorRepository>(
+      () => SensorRepository(getIt<Dio>()),
+    );
+  }
 
-  dio.options.connectTimeout = const Duration(seconds: 50);
-  dio.options.receiveTimeout = const Duration(seconds: 50);
+  if (!getIt.isRegistered<AuthCubit>()) {
+    getIt.registerFactory<AuthCubit>(() => AuthCubit(getIt<UserRepository>()));
+  }
 
-  dio.interceptors.add(
-    LogInterceptor(
-      responseBody: true,
-      error: true,
-      requestHeader: false,
-      responseHeader: false,
-      request: true,
-      requestBody: true,
-    ),
-  );
-
-  return dio;
+  if (!getIt.isRegistered<SensorCubit>()) {
+    getIt.registerFactory<SensorCubit>(
+      () => SensorCubit(getIt<SensorRepository>()),
+    );
+  }
 }

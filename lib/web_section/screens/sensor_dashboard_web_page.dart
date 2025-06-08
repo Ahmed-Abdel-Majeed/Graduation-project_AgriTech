@@ -1,6 +1,6 @@
-import 'package:agri/presentation/dashboard/pages/air_water_temperature_dashboard.dart';
-import 'package:agri/presentation/dashboard/pages/ph_ec_page.dart';
-import 'package:agri/presentation/dashboard/widgets/top_metrics_row.dart';
+import 'package:agri/features/main/presentation/dashboard/pages/air_water_temperature_dashboard.dart';
+import 'package:agri/features/main/presentation/dashboard/pages/ph_ec_page.dart';
+import 'package:agri/features/main/presentation/dashboard/widgets/top_metrics_row.dart';
 import 'package:flutter/material.dart';
 import '../../../domain/entities/sensor_reading.dart';
 import 'package:agri/ui/widgets/main_layout.dart';

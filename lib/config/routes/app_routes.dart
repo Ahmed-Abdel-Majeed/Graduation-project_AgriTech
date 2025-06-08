@@ -1,19 +1,21 @@
 import 'package:agri/features/camera/screens/crop_scan_page.dart';
 import 'package:agri/features/auth/presentation/pages/login_screen.dart';
 import 'package:agri/features/auth/presentation/pages/register_screen.dart';
-import 'package:agri/features/farmdashboard/presentation/pages/hydroponics_control_page.dart';
-import 'package:agri/presentation/dashboard/screens/humidity_dashboard_screen.dart';
-import 'package:agri/presentation/dashboard/screens/hydropoinc_dashboard_screen.dart';
-import 'package:agri/presentation/dashboard/screens/temperature_dashboard_screen.dart';
-import 'package:agri/presentation/main/screens/main_screen.dart';
-import 'package:agri/presentation/welcome/screens/splash_screen.dart.dart';
-import 'package:agri/presentation/welcome/screens/welcome_screen.dart';
-import 'package:agri/responsive/responsive_page.dart';
+import 'package:agri/features/chat_bot/screens/chat_screen.dart';
+import 'package:agri/features/farmdashboard/presentation/pages/main_farm_screen.dart';
+import 'package:agri/features/farmdashboard/presentation/pages/farm_dashboard.dart';
+import 'package:agri/features/main/presentation/dashboard/screens/humidity_dashboard_screen.dart';
+import 'package:agri/features/main/presentation/dashboard/screens/hydropoinc_dashboard_screen.dart';
+import 'package:agri/features/main/presentation/dashboard/screens/temperature_dashboard_screen.dart';
+import 'package:agri/features/main/presentation/main/screens/main_screen.dart';
+import 'package:agri/features/main/presentation/welcome/screens/splash_screen.dart.dart';
+import 'package:agri/features/main/presentation/welcome/screens/welcome_screen.dart';
+import 'package:agri/features/main/responsive/responsive_page.dart';
 import 'package:agri/ui/widgets/home_screen.dart';
 import 'package:agri/web_section/screens/hydroponic_dashboard_web%20.dart';
 import 'package:flutter/material.dart';
 
-import '../../presentation/dashboard/screens/plant_monitoring_page.dart'
+import '../../features/main/presentation/dashboard/screens/plant_monitoring_page.dart'
     show PlantMonitoringPage;
 
 class AppRoutes {
@@ -35,6 +37,8 @@ class AppRoutes {
   static const String sensorDashboardMobilePage = "/sensorDashboardMobilePage";
   static const String hydroponicDashboard = "/hydroponicDashboard";
   static const String hydroponicDashboardWeb = "/hydroponicDashboardWeb";
+  static const String chatScreen = "/chatScreen";
+  static const String mainFarmScreen = "/mainFarmScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -62,16 +66,25 @@ class AppRoutes {
       case welcome:
         return MaterialPageRoute(builder: (_) => WelcomeScreen());
       case hydroponicsControlPage:
-        return MaterialPageRoute(builder: (_) => const  HydroponicsControlPage ());
+        return MaterialPageRoute(
+          builder: (_) => const FarmDashboard(),
+        );
       case plantMonitoringPage:
         return MaterialPageRoute(builder: (_) => const PlantMonitoringPage());
       case cropScanPage:
         return MaterialPageRoute(builder: (_) => const CropScanPage());
-
+      case chatScreen:
+        return MaterialPageRoute(builder: (_) => const ChatScreen());
       case hydroponicDashboard:
         return MaterialPageRoute(builder: (_) => const HydroponicDashboard());
       case hydroponicDashboardWeb:
-        return MaterialPageRoute(builder: (_) => const HydroponicDashboardWeb());
+        return MaterialPageRoute(
+          builder: (_) => const HydroponicDashboardWeb(),
+        );
+        case mainFarmScreen:
+        return MaterialPageRoute(
+          builder: (_) => const MainFarmScreen(),
+        );
 
       default:
         return MaterialPageRoute(

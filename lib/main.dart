@@ -1,21 +1,16 @@
+import 'package:agri/app/bootstrap.dart';
+import 'package:agri/core/utils/di/injection.dart';
+import 'package:agri/features/auth/presentation/cuibt/auth_cubit.dart';
 import 'package:flutter/material.dart';
-import 'core/config/routes/app_router.dart';
-import 'core/config/theme/app_theme.dart';
+import 'package:get_it/get_it.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+   setupDependencies();
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  // Check auth status before bootstrapping
+  final authCubit = GetIt.instance<AuthCubit>();
+  await authCubit.checkAuthStatus();
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Agri App',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      onGenerateRoute: AppRouter.onGenerateRoute,
-    );
-  }
+  bootstrap();
 }

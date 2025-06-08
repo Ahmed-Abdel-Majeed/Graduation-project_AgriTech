@@ -14,7 +14,10 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<AppUserEntity> signIn(String email, String password) async {
-    final response = await authApi.signIn({'email': email, 'password': password});
+    final response = await authApi.signIn({
+      'email': email,
+      'password': password,
+    });
     return AppUserModel.fromJson(response.data);
   }
 
@@ -44,12 +47,17 @@ class UserRepositoryImpl implements UserRepository {
   Future<BaseResponse> updateAvatar(String avatarUrl) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? "";
-    final response = await authApi.updateAvatar("Bearer $token", {'avatar': avatarUrl});
+    final response = await authApi.updateAvatar("Bearer $token", {
+      'avatar': avatarUrl,
+    });
     return BaseResponse.fromJson(response.data);
   }
 
   @override
-  Future<BaseResponse> changePassword(String currentPassword, String newPassword) async {
+  Future<BaseResponse> changePassword(
+    String currentPassword,
+    String newPassword,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? "";
     final response = await authApi.changePassword("Bearer $token", {
@@ -66,7 +74,10 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<BaseResponse> resetPassword(String resetToken, String newPassword) async {
+  Future<BaseResponse> resetPassword(
+    String resetToken,
+    String newPassword,
+  ) async {
     final response = await authApi.resetPassword({
       'resetToken': resetToken,
       'newPassword': newPassword,

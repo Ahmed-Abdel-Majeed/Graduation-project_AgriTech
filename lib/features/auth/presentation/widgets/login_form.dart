@@ -4,9 +4,8 @@ import 'package:agri/config/routes/app_routes.dart';
 import 'package:agri/features/auth/presentation/cuibt/auth_cubit.dart';
 import 'package:agri/features/auth/presentation/cuibt/auth_state.dart';
 import 'package:screenwise/screenwise.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../presentation/shared/widgets/custom_button.dart';
+import '../../../main/presentation/shared/widgets/custom_button.dart';
 import 'login_header.dart';
 import 'social_login_buttons.dart';
 
@@ -21,11 +20,6 @@ class _LoginFormState extends State<LoginForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  Future<void> saveToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('token', token);
-  }
-
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -34,7 +28,6 @@ class _LoginFormState extends State<LoginForm> {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) async {
         if (state is AuthAuthenticated) {
-          await saveToken(state.user.token ?? '');
           Navigator.of(context).pushNamedAndRemoveUntil(
             AppRoutes.home,
             (Route<dynamic> route) => false,
@@ -59,7 +52,7 @@ class _LoginFormState extends State<LoginForm> {
                   mobileWidthFraction: 1.0,
                   tabletWidthFraction: 0.55,
                   desktopWidthFraction: 0.36,
-            
+
                   child: TextField(
                     controller: _emailController,
                     decoration: InputDecoration(
@@ -75,7 +68,7 @@ class _LoginFormState extends State<LoginForm> {
                 ),
                 const SizedBox(height: 20),
                 // TextField for Password
-                  ResponsiveContainer(
+                ResponsiveContainer(
                   mobileWidthFraction: 1.0,
                   tabletWidthFraction: 0.55,
                   desktopWidthFraction: 0.36,
@@ -95,9 +88,9 @@ class _LoginFormState extends State<LoginForm> {
                 ),
                 // const SizedBox(height: 20),
                 ResponsiveContainer(
-                mobileWidthFraction: 1.0,
-                tabletWidthFraction: 0.55,
-                desktopWidthFraction: 0.36,
+                  mobileWidthFraction: 1.0,
+                  tabletWidthFraction: 0.55,
+                  desktopWidthFraction: 0.36,
                   child: TextButton(
                     onPressed: () {},
                     child: Align(
@@ -112,10 +105,10 @@ class _LoginFormState extends State<LoginForm> {
                 const SizedBox(height: 20),
                 state is AuthLoading
                     ? const CircularProgressIndicator()
-                    :     ResponsiveContainer(
-                  mobileWidthFraction: 1.0,
-                  tabletWidthFraction: 0.55,
-                  desktopWidthFraction: 0.36,
+                    : ResponsiveContainer(
+                      mobileWidthFraction: 1.0,
+                      tabletWidthFraction: 0.55,
+                      desktopWidthFraction: 0.36,
                       child: CustomElevatedButton(
                         text: 'Login',
                         onPressed: () {
@@ -129,12 +122,19 @@ class _LoginFormState extends State<LoginForm> {
                 const SizedBox(height: 20),
                 const Row(
                   children: [
-                    Expanded(child: Divider(thickness: 1, color: Colors.black26)),
+                    Expanded(
+                      child: Divider(thickness: 1, color: Colors.black26),
+                    ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text('OR', style: TextStyle(color: Colors.black54)),
+                      child: Text(
+                        'OR',
+                        style: TextStyle(color: Colors.black54),
+                      ),
                     ),
-                    Expanded(child: Divider(thickness: 1, color: Colors.black26)),
+                    Expanded(
+                      child: Divider(thickness: 1, color: Colors.black26),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -149,7 +149,8 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                     InkWell(
                       onTap:
-                          () => Navigator.pushNamed(context, AppRoutes.register),
+                          () =>
+                              Navigator.pushNamed(context, AppRoutes.register),
                       child: const Text(
                         " Register",
                         style: TextStyle(

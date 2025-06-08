@@ -2,32 +2,52 @@ import 'dart:typed_data';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/repositories/user_repository.dart';
+import '../../data/services/auth_service.dart';
+import '../../domain/entities/app_user_entity.dart';
 import 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final UserRepository userRepository;
-  AuthCubit(this.userRepository) : super(AuthInitial());
+  final AuthService authService;
+
+  AuthCubit(this.userRepository, {AppUserEntity? initialUser})
+    : authService = AuthService(userRepository),
+      super(
+        initialUser != null ? AuthAuthenticated(initialUser) : AuthInitial(),
+      );
+
+  // Check for auto-login
+  Future<void> checkAuthStatus() async {
+    emit(AuthLoading());
+    try {
+      final user = await authService.autoLogin();
+      if (user != null) {
+        emit(AuthAuthenticated(user));
+      } else {
+        emit(AuthInitial());
+      }
+    } catch (e) {
+      emit(AuthInitial());
+    }
+  }
 
   // Sign In
   Future<void> signIn(String email, String password) async {
     if (email.isEmpty || password.isEmpty) {
-      emit(AuthError("من فضلك أدخل البريد الإلكتروني وكلمة المرور"));
+      emit(AuthError("Please enter email and password"));
       return;
     }
 
     emit(AuthLoading());
     try {
       final user = await userRepository.signIn(email, password);
+      await authService.saveAuthData(user);
       emit(AuthAuthenticated(user));
     } catch (e) {
       emit(
-        AuthError(
-          "حدث خطأ أثناء تسجيل الدخول. تأكد من البيانات وحاول مرة أخرى.",
-        ),
+        AuthError("Login failed. Please check your credentials and try again."),
       );
-      print(e);
     }
   }
 
@@ -49,7 +69,6 @@ class AuthCubit extends Cubit<AuthState> {
         if (imageName != null) "image": imageName,
       };
 
-
       final response = await userRepository.signUp(userData);
       emit(AuthSignUpSuccess(response.message.toString()));
     } catch (e) {
@@ -61,14 +80,11 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> signOut() async {
     emit(AuthLoading());
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.remove('token');
-
-      final response = await userRepository.signOut();
-
-      emit(AuthSignOutSuccess(response.message.toString()));
+      await userRepository.signOut();
+      await authService.clearAuthData();
+      emit(AuthInitial());
     } catch (e) {
-      emit(AuthError(e.toString()));
+      emit(AuthError("Failed to sign out. Please try again."));
     }
   }
 
@@ -162,6 +178,7 @@ class AuthCubit extends Cubit<AuthState> {
       }
 
       final appUser = await userRepository.signInWithGoogle(idToken);
+      await authService.saveAuthData(appUser);
       emit(AuthAuthenticated(appUser));
     } catch (e) {
       emit(AuthError("خطأ أثناء تسجيل الدخول: ${e.toString()}"));

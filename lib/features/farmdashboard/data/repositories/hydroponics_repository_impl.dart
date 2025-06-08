@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../domain/models/control_types.dart';
+import '../../domain/models/water_pump_control_type.dart';
+import '../../domain/models/ph_control_type.dart';
+import '../../domain/models/tds_control_type.dart';
+import '../../domain/models/light_control_type.dart';
+import '../../domain/models/dose_types.dart';
 import '../../domain/repositories/hydroponics_repository.dart';
 
 class HydroponicsRepositoryImpl implements HydroponicsRepository {
-  // In a real app, this would connect to a backend service or local storage
-  // For now, we'll just store data in memory
+  // HydroponicsRepositoryImpl();
 
   WaterPumpControlType _waterPumpControl = WaterPumpControlType(
     isControlledByAI: false,
@@ -27,6 +30,7 @@ class HydroponicsRepositoryImpl implements HydroponicsRepository {
   );
 
   LightControlType _lightControl = LightControlType(
+    isControlledByAI: false,
     whiteLight: LightScheduleType(
       startTime: TimeOfDay(hour: 8, minute: 0),
       stopTime: TimeOfDay(hour: 18, minute: 0),

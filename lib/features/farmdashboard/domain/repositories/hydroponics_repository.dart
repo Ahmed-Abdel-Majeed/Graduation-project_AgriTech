@@ -1,4 +1,8 @@
-import '../models/control_types.dart';
+import '../models/water_pump_control_type.dart';
+import '../models/ph_control_type.dart';
+import '../models/tds_control_type.dart';
+import '../models/light_control_type.dart';
+import '../models/dose_types.dart';
 
 abstract class HydroponicsRepository {
   // Water Pump

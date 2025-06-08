@@ -1,10 +1,10 @@
-import 'package:agri/presentation/dashboard/screens/hydropoinc_dashboard_screen.dart';
+import 'package:agri/features/main/presentation/dashboard/screens/hydropoinc_dashboard_screen.dart';
 import 'package:agri/ui/widgets/main_layout.dart';
 import 'package:agri/web_section/widgets/ai_insights_section_web.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../domain/entities/sensor_reading.dart';
-import '../../responsive/responsive_page.dart';
+import '../../features/main/responsive/responsive_page.dart';
 import '../widgets/sensor_line_chart_web.dart';
 
 class HydroponicDashboardWeb extends StatefulWidget {

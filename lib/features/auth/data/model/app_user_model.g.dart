@@ -11,6 +11,7 @@ AppUserModel _$AppUserModelFromJson(Map<String, dynamic> json) => AppUserModel(
   email: json['email'] as String,
   username: json['username'] as String,
   image: json['image'] as String,
+  token: json['token'] as String?,
 );
 
 Map<String, dynamic> _$AppUserModelToJson(AppUserModel instance) =>
@@ -19,4 +20,5 @@ Map<String, dynamic> _$AppUserModelToJson(AppUserModel instance) =>
       'email': instance.email,
       'username': instance.username,
       'image': instance.image,
+      'token': instance.token,
     };

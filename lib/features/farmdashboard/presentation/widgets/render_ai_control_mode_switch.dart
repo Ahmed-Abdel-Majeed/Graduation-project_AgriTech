@@ -6,14 +6,24 @@ Widget renderAIControlModeSwitch({
   required bool disabled,
 }) {
   return Row(
+  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      const Text("Manual", style: TextStyle(fontSize: 12)),
+      const Text(
+        "Manual",
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+      SizedBox(width: 8),
       Switch(
         value: controlledBy,
         onChanged: disabled ? null : onChange,
         activeColor: Colors.blue,
       ),
-      const Text("AI", style: TextStyle(fontSize: 12)),
+      SizedBox(width: 8),
+
+      const Text(
+        "AI",
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
       if (controlledBy)
         const Padding(
           padding: EdgeInsets.only(left: 4),

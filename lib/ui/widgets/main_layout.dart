@@ -19,78 +19,111 @@ class MainLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final body =
-        useResponsivePadding
-            ? ScreenTypeLayout.builder(
-              mobile: (_) => _buildPadded(child, 10),
-              tablet: (_) => _buildPadded(child, 100),
-              desktop:
-                  (_) => _buildPadded(
-                    child,
-                    MediaQuery.of(context).size.width * 0.2,
-                  ),
-            )
-            : child;
+    final theme = Theme.of(context);
+    final body = useResponsivePadding
+        ? ScreenTypeLayout.builder(
+            mobile: (_) => _buildPadded(child, 16),
+            tablet: (_) => _buildPadded(child, 100),
+            desktop: (_) => _buildPadded(
+                  child,
+                  MediaQuery.of(context).size.width * 0.2,
+                ),
+          )
+        : child;
 
     return Scaffold(
-      appBar:
-          showAppBar
-              ? AppBar(
-                leading: const Icon(Icons.agriculture,),
-                title: const Text('Smart Farm Dashboard'),
-                iconTheme: const IconThemeData(color: Colors.black),
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.home),
-                    tooltip: 'Home',
-                    onPressed: () {
-                      Navigator.pushNamed(context, AppRoutes.home);
-                    },
+      backgroundColor: theme.scaffoldBackgroundColor,
+      appBar: showAppBar
+          ? AppBar(
+              elevation: 2,
+              backgroundColor: theme.colorScheme.surface,
+              leading: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.agriculture,
+                  color: theme.colorScheme.primary,
+                  size: 28,
+                ),
+              ),
+              title: Text(
+                'Smart Farm Dashboard',
+                style: theme.textTheme.titleLarge?.copyWith(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              actions: [
+                _buildAppBarAction(
+                  context,
+                  Icons.home_rounded,
+                  'Home',
+                  () => Navigator.pushNamed(context, AppRoutes.home),
+                ),
+                _buildAppBarAction(
+                  context,
+                  Icons.analytics_rounded,
+                  'Hydroponic Dashboard',
+                  () => Navigator.pushNamed(
+                    context,
+                    AppRoutes.hydroponicDashboardWeb,
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.analytics),
-                    tooltip: 'Hydroponic Dashboard',
-                    onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        AppRoutes.hydroponicDashboardWeb,
-                      );
-                    },
+                ),
+                _buildAppBarAction(
+                  context,
+                  Icons.camera_alt_rounded,
+                  'Scan',
+                  () => Navigator.pushNamed(context, AppRoutes.cropScanPage),
+                ),
+                _buildAppBarAction(
+                  context,
+                  Icons.photo_filter_rounded,
+                  'Photos',
+                  () => Navigator.pushNamed(
+                    context,
+                    AppRoutes.plantMonitoringPage,
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.camera_alt),
-                    tooltip: 'Scan',
-                    onPressed: () {
-                      Navigator.pushNamed(context, AppRoutes.cropScanPage);
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.photo_filter),
-                    tooltip: 'Photos',
-                    onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        AppRoutes.plantMonitoringPage,
-                      );
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.more_horiz),
-                    tooltip: 'hydroponicsControlPage',
-                    onPressed: () {
-                      Navigator.pushNamed(context, AppRoutes.hydroponicsControlPage);
-                    },
-                  ),
-                ],
-              )
-              : null,
+                ),
+                _buildAppBarAction(
+                  context,
+                  Icons.settings_rounded,
+                  'Hydroponics Control',
+                  () => Navigator.pushNamed(context, AppRoutes.hydroponicsControlPage),
+                ),
+              ],
+            )
+          : null,
       body: body,
+    );
+  }
+
+  Widget _buildAppBarAction(
+    BuildContext context,
+    IconData icon,
+    String tooltip,
+    VoidCallback onPressed,
+  ) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      child: IconButton(
+        icon: Icon(
+          icon,
+          color: theme.colorScheme.primary,
+          size: 24,
+        ),
+        tooltip: tooltip,
+        onPressed: onPressed,
+        style: IconButton.styleFrom(
+          foregroundColor: theme.colorScheme.primary,
+          hoverColor: theme.colorScheme.primary.withOpacity(0.1),
+        ),
+      ),
     );
   }
 
   Widget _buildPadded(Widget child, double padding) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: padding, vertical: 20),
+      padding: EdgeInsets.symmetric(horizontal: padding, vertical: 24),
       child: child,
     );
   }

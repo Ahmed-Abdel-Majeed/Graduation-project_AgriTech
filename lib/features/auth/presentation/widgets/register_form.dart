@@ -8,8 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' show basename;
 import 'package:screenwise/screenwise.dart';
-import '../../../../ui/widgets/snackbar.dart';
-import '../../../../presentation/shared/widgets/custom_button.dart';
+import '../../../../core/utils/snackbar.dart';
+import '../../../main/presentation/shared/widgets/custom_button.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});

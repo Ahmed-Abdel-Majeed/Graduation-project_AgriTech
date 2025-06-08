@@ -13,6 +13,7 @@ class ApiClient {
 
     dio.interceptors.addAll([
       AwesomeDioInterceptor(
+        
         logRequestTimeout: true,
         logRequestHeaders: true,
         logResponseHeaders: true,

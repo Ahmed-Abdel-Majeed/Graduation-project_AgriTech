@@ -18,20 +18,33 @@ abstract class AuthApi {
   Future<HttpResponse<dynamic>> signOut(@Header("Authorization") String token);
 
   @POST("/auth/update-avatar")
-  Future<HttpResponse<dynamic>> updateAvatar(@Header("Authorization") String token, @Body() Map<String, dynamic> body);
+  Future<HttpResponse<dynamic>> updateAvatar(
+    @Header("Authorization") String token,
+    @Body() Map<String, dynamic> body,
+  );
 
   @GET("/auth/profile")
-  Future<HttpResponse<dynamic>> getProfile(@Header("Authorization") String token);
+  Future<HttpResponse<dynamic>> getProfile(
+    @Header("Authorization") String token,
+  );
 
   @POST("/auth/change-password")
-  Future<HttpResponse<dynamic>> changePassword(@Header("Authorization") String token, @Body() Map<String, dynamic> body);
+  Future<HttpResponse<dynamic>> changePassword(
+    @Header("Authorization") String token,
+    @Body() Map<String, dynamic> body,
+  );
 
   @POST("/auth/forgot-password")
-  Future<HttpResponse<dynamic>> forgotPassword(@Body() Map<String, dynamic> body);
+  Future<HttpResponse<dynamic>> forgotPassword(
+    @Body() Map<String, dynamic> body,
+  );
 
   @POST("/auth/reset-password")
-  Future<HttpResponse<dynamic>> resetPassword(@Body() Map<String, dynamic> body);
+  Future<HttpResponse<dynamic>> resetPassword(
+    @Body() Map<String, dynamic> body,
+  );
   @POST("/auth/google")
-  Future<HttpResponse<dynamic>> signInWithGoogle(@Body() Map<String, dynamic> body);
-
+  Future<HttpResponse<dynamic>> signInWithGoogle(
+    @Body() Map<String, dynamic> body,
+  );
 }

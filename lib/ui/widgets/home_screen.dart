@@ -1,13 +1,13 @@
-import 'package:agri/features/farmdashboard/presentation/pages/hydroponics_control_page.dart';
-import 'package:agri/presentation/main/screens/web_dashboard_layout.dart';
-import 'package:agri/responsive/responsive_page.dart';
+import 'package:agri/features/farmdashboard/presentation/pages/farm_dashboard.dart';
+import 'package:agri/features/main/presentation/main/screens/web_dashboard_layout.dart';
+import 'package:agri/features/main/responsive/responsive_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/camera/screens/crop_scan_page.dart';
-import '../../presentation/dashboard/screens/hydropoinc_dashboard_screen.dart';
-import '../../presentation/dashboard/screens/plant_monitoring_page.dart';
-import '../../presentation/main/screens/main_screen.dart';
+import '../../features/main/presentation/dashboard/screens/hydropoinc_dashboard_screen.dart';
+import '../../features/main/presentation/dashboard/screens/plant_monitoring_page.dart';
+import '../../features/main/presentation/main/screens/main_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
       const HydroponicDashboard(),
       const CropScanPage(),
       const PlantMonitoringPage(),
-      const HydroponicsControlPage(),
+      const FarmDashboard(),
     ];
     return pages[_currentIndex];
   }
@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const BottomNavigationBarItem(
           icon: Icon(Icons.more_horiz),
-          label: 'hydroponicsControlPage',
+          label: 'FarmDashboard',
         ),
       ],
     );
