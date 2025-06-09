@@ -6,7 +6,7 @@ import '../../domain/models/light_control_type.dart';
 import '../../domain/models/dose_types.dart';
 import '../../domain/repositories/hydroponics_repository.dart';
 
-class HydroponicsRepositoryImpl implements HydroponicsRepository {
+class FarmRepositoryImpl implements FarmRepository {
   // HydroponicsRepositoryImpl();
 
   WaterPumpControlType _waterPumpControl = WaterPumpControlType(

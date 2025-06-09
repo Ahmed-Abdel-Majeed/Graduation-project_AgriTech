@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
 Widget renderAIControlModeSwitch({
-  required bool controlledBy,
+  required bool controlledBy, // true = AI, false = Manual
   required void Function(bool) onChange,
   required bool disabled,
 }) {
   return Row(
-  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       const Text(
         "Manual",
@@ -19,7 +18,6 @@ Widget renderAIControlModeSwitch({
         activeColor: Colors.blue,
       ),
       SizedBox(width: 8),
-
       const Text(
         "AI",
         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

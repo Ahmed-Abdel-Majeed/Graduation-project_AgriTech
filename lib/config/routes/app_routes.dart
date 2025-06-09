@@ -10,9 +10,7 @@ import 'package:agri/features/main/presentation/dashboard/screens/temperature_da
 import 'package:agri/features/main/presentation/main/screens/main_screen.dart';
 import 'package:agri/features/main/presentation/welcome/screens/splash_screen.dart.dart';
 import 'package:agri/features/main/presentation/welcome/screens/welcome_screen.dart';
-import 'package:agri/features/main/responsive/responsive_page.dart';
 import 'package:agri/ui/widgets/home_screen.dart';
-import 'package:agri/web_section/screens/hydroponic_dashboard_web%20.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/main/presentation/dashboard/screens/plant_monitoring_page.dart'
@@ -20,7 +18,6 @@ import '../../features/main/presentation/dashboard/screens/plant_monitoring_page
 
 class AppRoutes {
   static const String welcome = "/welcome";
-
   static const String login = "/login";
   static const String register = "/register";
   static const String home = "/home";
@@ -39,6 +36,7 @@ class AppRoutes {
   static const String hydroponicDashboardWeb = "/hydroponicDashboardWeb";
   static const String chatScreen = "/chatScreen";
   static const String mainFarmScreen = "/mainFarmScreen";
+  static const String farmdashboard = "/mainFarmScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -47,12 +45,10 @@ class AppRoutes {
       case home:
         return MaterialPageRoute(
           builder:
-              (_) => ResponsiveLayout(
-                mobile: const HomeScreen(),
-                tablet: const HomeScreen(),
-                desktop: const HomeScreen(),
-              ),
+              (_) => const HomeScreen(), // Use HomeScreen for the home route
         );
+      case splash:
+        return MaterialPageRoute(builder: (_) => SplashScreen());
       case splash:
         return MaterialPageRoute(builder: (_) => SplashScreen());
       case mainScreen:
@@ -65,10 +61,10 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => HumidityChartScreen());
       case welcome:
         return MaterialPageRoute(builder: (_) => WelcomeScreen());
-      case hydroponicsControlPage:
-        return MaterialPageRoute(
-          builder: (_) => const FarmDashboard(),
-        );
+      case farmdashboard:
+        final args = settings.arguments as int;
+        return MaterialPageRoute(builder: (_) => FarmDashboard(index: args));
+
       case plantMonitoringPage:
         return MaterialPageRoute(builder: (_) => const PlantMonitoringPage());
       case cropScanPage:
@@ -77,14 +73,9 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const ChatScreen());
       case hydroponicDashboard:
         return MaterialPageRoute(builder: (_) => const HydroponicDashboard());
-      case hydroponicDashboardWeb:
-        return MaterialPageRoute(
-          builder: (_) => const HydroponicDashboardWeb(),
-        );
-        case mainFarmScreen:
-        return MaterialPageRoute(
-          builder: (_) => const MainFarmScreen(),
-        );
+
+      case mainFarmScreen:
+        return MaterialPageRoute(builder: (_) => const MainFarmScreen());
 
       default:
         return MaterialPageRoute(

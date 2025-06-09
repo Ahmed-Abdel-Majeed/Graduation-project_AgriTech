@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class TDSControlType {
   final bool isControlledByAI;
   final double min;
@@ -14,7 +12,7 @@ class TDSControlType {
   });
 
   Map<String, dynamic> toMap() => {
-    'controlledBy': isControlledByAI,
+    'controlledBy': isControlledByAI ? 'AI' : 'Manual', // نحول bool لـ String هنا
     'min': min,
     'max': max,
     'currentValue': currentValue,
@@ -22,10 +20,10 @@ class TDSControlType {
   };
 
   factory TDSControlType.fromMap(Map<String, dynamic> map) => TDSControlType(
-    isControlledByAI: map['controlledBy'] ?? false,
-    min: map['min'] ?? 1.2,
-    max: map['max'] ?? 1.8,
-    currentValue: map['currentValue'] ?? 1.5,
+    isControlledByAI: (map['controlledBy'] == 'AI'),
+    min: (map['min'] ?? 1.2).toDouble(),
+    max: (map['max'] ?? 1.8).toDouble(),
+    currentValue: (map['currentValue'] ?? 1.5).toDouble(),
   );
 
   TDSControlType copyWith({

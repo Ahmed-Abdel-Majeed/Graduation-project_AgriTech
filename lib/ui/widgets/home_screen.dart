@@ -1,6 +1,4 @@
-import 'package:agri/features/farmdashboard/presentation/pages/farm_dashboard.dart';
-import 'package:agri/features/main/presentation/main/screens/web_dashboard_layout.dart';
-import 'package:agri/features/main/responsive/responsive_page.dart';
+import 'package:agri/features/farmdashboard/presentation/pages/main_farm_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -28,20 +26,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildBody() {
-    if (kIsWeb) {
-      return const ResponsiveLayout(
-        mobile: WebDashboardLayout(),
-        tablet: WebDashboardLayout(),
-        desktop: WebDashboardLayout(),
-      );
-    }
-
     final pages = [
       const MainScreen(),
       const HydroponicDashboard(),
       const CropScanPage(),
       const PlantMonitoringPage(),
-      const FarmDashboard(),
+      MainFarmScreen(),
     ];
     return pages[_currentIndex];
   }
@@ -79,5 +69,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
-
 }

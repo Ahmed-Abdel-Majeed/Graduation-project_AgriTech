@@ -36,7 +36,11 @@ class WaterPumpControlCard extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        iconTheme: IconThemeData(color: const Color.fromARGB(0, 0, 0, 0)),
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 255, 101, 101),
+        
+        grade: 0.0, // Adjust the color as needed
+  
+        ), 
         title: Row(
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [

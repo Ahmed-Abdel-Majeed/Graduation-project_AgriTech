@@ -4,7 +4,7 @@ import '../models/tds_control_type.dart';
 import '../models/light_control_type.dart';
 import '../models/dose_types.dart';
 
-abstract class HydroponicsRepository {
+abstract class FarmRepository {
   // Water Pump
   Future<WaterPumpControlType> getWaterPumpControl();
   Future<void> updateWaterPumpControl(WaterPumpControlType control);
