@@ -28,7 +28,7 @@ class PHController extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
 
-      phControl = await repository.getPHControl();
+      // phControl = await repository.getPHControl();
 
       isLoading = false;
       notifyListeners();

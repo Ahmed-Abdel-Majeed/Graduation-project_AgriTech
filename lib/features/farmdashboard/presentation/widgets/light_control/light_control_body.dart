@@ -1,11 +1,12 @@
+import 'package:agri/features/farmdashboard/presentation/widgets/light_control/light_model.dart';
 import 'package:flutter/material.dart';
 import 'light_schedule_section.dart';
 import 'status_chips_row.dart';
 import '../render_ai_control_mode_switch.dart';
 
 class LightControlBody extends StatefulWidget {
-  final Map<String, dynamic> control;
-  final Function(Map<String, dynamic>) onControlChange;
+  final LightControl control;
+  final Function(LightControl) onControlChange;
   final bool isLoading;
 
   const LightControlBody({
@@ -20,41 +21,55 @@ class LightControlBody extends StatefulWidget {
 }
 
 class _LightControlBodyState extends State<LightControlBody> {
-  late Map<String, dynamic> _whiteLight;
-  late Map<String, dynamic> _growthLight;
-  late bool _isAI;
+  late LightControl _control;
 
   @override
   void initState() {
     super.initState();
-    updateControl(widget.control);
+    _control = widget.control;
   }
 
   @override
   void didUpdateWidget(covariant LightControlBody oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.control != widget.control) {
-      updateControl(widget.control);
+      _control = widget.control;
     }
-  }
-
-  void updateControl(Map<String, dynamic> control) {
-    _whiteLight = Map<String, dynamic>.from(control['whiteLight'] ?? {});
-    _growthLight = Map<String, dynamic>.from(control['growthLight'] ?? {});
-    _isAI = control['controlledBy'] ?? false;
   }
 
   void handleChange(String? lightType, String field, dynamic value) {
-    final newControl = {...widget.control};
+    LightControl updated;
 
-    if (lightType == null) {
-      newControl[field] = value;
+    if (lightType == null && field == 'isControlledByAI') {
+      updated = LightControl(
+        whiteLight: _control.whiteLight,
+        growthLight: _control.growthLight,
+        isControlledByAI: value,
+      );
+    } else if (lightType == 'whiteLight') {
+      updated = LightControl(
+        whiteLight: LightSchedule(
+          startTime: field == 'startTime' ? value : _control.whiteLight.startTime,
+          stopTime: field == 'stopTime' ? value : _control.whiteLight.stopTime,
+          isCurrentlyOn: _control.whiteLight.isCurrentlyOn,
+        ),
+        growthLight: _control.growthLight,
+        isControlledByAI: _control.isControlledByAI,
+      );
     } else {
-      newControl[lightType] = {...newControl[lightType], field: value};
+      updated = LightControl(
+        whiteLight: _control.whiteLight,
+        growthLight: LightSchedule(
+          startTime: field == 'startTime' ? value : _control.growthLight.startTime,
+          stopTime: field == 'stopTime' ? value : _control.growthLight.stopTime,
+          isCurrentlyOn: _control.growthLight.isCurrentlyOn,
+        ),
+        isControlledByAI: _control.isControlledByAI,
+      );
     }
 
-    setState(() => updateControl(newControl));
-    widget.onControlChange(newControl);
+    setState(() => _control = updated);
+    widget.onControlChange(updated);
   }
 
   @override
@@ -65,39 +80,45 @@ class _LightControlBodyState extends State<LightControlBody> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           renderAIControlModeSwitch(
-            controlledBy: _isAI,
-            onChange: (value) => handleChange(null, 'controlledBy', value),
+            controlledBy: _control.isControlledByAI,
+            onChange: (value) => handleChange(null, 'isControlledByAI', value),
             disabled: widget.isLoading,
           ),
           const Divider(height: 24),
           StatusChipsRow(
-            whiteLightOn: _whiteLight['isCurrentlyOn'] ?? false,
-            growthLightOn: _growthLight['isCurrentlyOn'] ?? false,
+            whiteLightOn: _control.whiteLight.isCurrentlyOn,
+            growthLightOn: _control.growthLight.isCurrentlyOn,
           ),
           const SizedBox(height: 16),
           LightScheduleSection(
             title: "White Light Schedule",
-            lightData: _whiteLight,
+            lightData: {
+              'onTime': _control.whiteLight.startTime,
+              'offTime': _control.whiteLight.stopTime,
+            },
             lightType: 'whiteLight',
-            isAI: _isAI,
+            isAI: _control.isControlledByAI,
             isLoading: widget.isLoading,
-            onChange: handleChange,
+            onChange: (type, key, value) => handleChange(type, key == 'onTime' ? 'startTime' : 'stopTime', value),
           ),
           const SizedBox(height: 16),
           LightScheduleSection(
             title: "Red/Blue (Growth) Light Schedule",
-            lightData: _growthLight,
+            lightData: {
+              'onTime': _control.growthLight.startTime,
+              'offTime': _control.growthLight.stopTime,
+            },
             lightType: 'growthLight',
-            isAI: _isAI,
+            isAI: _control.isControlledByAI,
             isLoading: widget.isLoading,
-            onChange: handleChange,
+            onChange: (type, key, value) => handleChange(type, key == 'onTime' ? 'startTime' : 'stopTime', value),
           ),
           const SizedBox(height: 24),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: _isAI || widget.isLoading ? null : () {
-                // Handle save
+              onPressed: _control.isControlledByAI || widget.isLoading ? null : () {
+                widget.onControlChange(_control);
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),

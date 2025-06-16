@@ -20,7 +20,6 @@ class FarmDashboardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // لكل الكنترولات المختلفة، اعتمد على القيمة بدل FarmController
     switch (index) {
       case 0:
         return Consumer<WaterPumpController>(
@@ -50,13 +49,9 @@ class FarmDashboardContent extends StatelessWidget {
         return Consumer<TDSController>(
           builder: (context, controller, _) {
             return TDSControlScreen(
-              control: controller.tdsControl.toMap(),
-              onControlChange: (map) =>
-                  controller.updateTDSControl(TDSControlType.fromMap(map)),
-              onScheduleDose: (time) => controller.scheduleTDSDose(10),
-              onCancelDose: controller.cancelTDSDose,
-              isLoading: controller.isLoading,
-            );
+  
+);
+
           },
         );
       case 3:

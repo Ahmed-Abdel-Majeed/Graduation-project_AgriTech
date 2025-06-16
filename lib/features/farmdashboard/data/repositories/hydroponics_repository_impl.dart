@@ -15,12 +15,12 @@ class FarmRepositoryImpl implements FarmRepository {
     durationMinutes: 0,
   );
 
-  PHControlType _phControl = PHControlType(
-    isControlledByAI: false,
-    min: 5.5,
-    max: 6.5,
-    currentValue: 6.0,
-  );
+  // PHControlType _phControl = PHControlType(
+  //   isControlledByAI: false,
+  //   min: 5.5,
+  //   max: 6.5,
+  //   currentValue: 6.0,
+  // );
 
   TDSControlType _tdsControl = TDSControlType(
     isControlledByAI: false,
@@ -57,18 +57,18 @@ class FarmRepositoryImpl implements FarmRepository {
     _addHistoryEntry('Water Pump Control Updated');
   }
 
-  @override
-  Future<PHControlType> getPHControl() async {
-    await Future.delayed(Duration(milliseconds: 500));
-    return _phControl;
-  }
+  // @override
+  // Future<PHControlType> getPHControl() async {
+  //   await Future.delayed(Duration(milliseconds: 500));
+  //   return _phControl;
+  // }
 
-  @override
-  Future<void> updatePHControl(PHControlType control) async {
-    await Future.delayed(Duration(milliseconds: 500));
-    _phControl = control;
-    _addHistoryEntry('pH Control Updated');
-  }
+  // @override
+  // Future<void> updatePHControl(PHControlType control) async {
+  //   await Future.delayed(Duration(milliseconds: 500));
+  //   _phControl = control;
+  //   _addHistoryEntry('pH Control Updated');
+  // }
 
   @override
   Future<void> scheduleDose(DoseType type, double amount) async {

@@ -9,11 +9,11 @@ abstract class FarmRepository {
   Future<WaterPumpControlType> getWaterPumpControl();
   Future<void> updateWaterPumpControl(WaterPumpControlType control);
 
-  // pH Control
-  Future<PHControlType> getPHControl();
-  Future<void> updatePHControl(PHControlType control);
-  Future<void> scheduleDose(DoseType type, double amount);
-  Future<void> cancelDose();
+  // // pH Control
+  // Future<PHControlType> getPHControl();
+  // Future<void> updatePHControl(PHControlType control);
+  // Future<void> scheduleDose(DoseType type, double amount);
+  // Future<void> cancelDose();
 
   // TDS Control
   Future<TDSControlType> getTDSControl();
