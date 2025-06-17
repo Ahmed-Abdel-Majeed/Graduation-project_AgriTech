@@ -1,35 +1,39 @@
-class WaterPumpControlType {
+class WaterPumpControl {
   final bool isControlledByAI;
   final bool isCurrentlyRunning;
   final int durationMinutes;
 
-  WaterPumpControlType({
+  WaterPumpControl({
     required this.isControlledByAI,
     required this.isCurrentlyRunning,
     required this.durationMinutes,
   });
 
-  Map<String, dynamic> toMap() => {
-    'controlledBy': isControlledByAI,
-    'isRunning': isCurrentlyRunning,
-    'duration': durationMinutes,
-    'status': 'Active',
-  };
+  factory WaterPumpControl.fromJson(Map<String, dynamic> json) {
+    return WaterPumpControl(
+      isControlledByAI: json['isControlledByAI'] ?? false,
+      isCurrentlyRunning: json['isCurrentlyRunning'] ?? false,
+      durationMinutes: json['durationMinutes'] ?? 0,
+    );
+  }
 
-  factory WaterPumpControlType.fromMap(Map<String, dynamic> map) =>
-      WaterPumpControlType(
-        isControlledByAI: map['controlledBy'] ?? false,
-        isCurrentlyRunning: map['isRunning'] ?? false,
-        durationMinutes: map['duration'] ?? 0,
-      );
+  Map<String, dynamic> toJson() {
+    return {
+      'isControlledByAI': isControlledByAI,
+      'isCurrentlyRunning': isCurrentlyRunning,
+      'durationMinutes': durationMinutes,
+    };
+  }
 
-  WaterPumpControlType copyWith({
+  WaterPumpControl copyWith({
     bool? isControlledByAI,
     bool? isCurrentlyRunning,
     int? durationMinutes,
-  }) => WaterPumpControlType(
-    isControlledByAI: isControlledByAI ?? this.isControlledByAI,
-    isCurrentlyRunning: isCurrentlyRunning ?? this.isCurrentlyRunning,
-    durationMinutes: durationMinutes ?? this.durationMinutes,
-  );
+  }) {
+    return WaterPumpControl(
+      isControlledByAI: isControlledByAI ?? this.isControlledByAI,
+      isCurrentlyRunning: isCurrentlyRunning ?? this.isCurrentlyRunning,
+      durationMinutes: durationMinutes ?? this.durationMinutes,
+    );
+  }
 }

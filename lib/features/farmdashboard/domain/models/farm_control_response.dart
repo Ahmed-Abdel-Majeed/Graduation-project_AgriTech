@@ -1,8 +1,9 @@
-import 'package:agri/features/farmdashboard/presentation/widgets/light_control/light_model.dart';
+import 'package:agri/features/farmdashboard/domain/models/farm_history_item.dart';
+import 'package:agri/features/farmdashboard/domain/models/light_model.dart';
 
 class FarmControlResponse {
   final LightControl lightSystem;
-  final List<HistoryItem> history;
+  final List<FarmHistoryItem> history;
 
   FarmControlResponse({required this.lightSystem, required this.history});
 
@@ -10,25 +11,9 @@ class FarmControlResponse {
     return FarmControlResponse(
       lightSystem: LightControl.fromJson(json['lightSystem']),
       history: (json['history'] as List)
-          .map((item) => HistoryItem.fromJson(item))
+          .map((item) => FarmHistoryItem.fromJson(item))
           .toList(),
     );
   }
 }
 
-class HistoryItem {
-  final int timestamp;
-  final String action;
-
-  HistoryItem({
-    required this.timestamp,
-    required this.action,
-  });
-
-  factory HistoryItem.fromJson(Map<String, dynamic> json) {
-    return HistoryItem(
-      timestamp: json['timestamp'],
-      action: json['action'],
-    );
-  }
-}

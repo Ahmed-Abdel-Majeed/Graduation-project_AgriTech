@@ -1,10 +1,6 @@
 import 'package:agri/config/routes/app_routes.dart';
-import 'package:agri/features/farmdashboard/data/repositories/hydroponics_repository_impl.dart';
-import 'package:agri/features/farmdashboard/presentation/controllers/history_controller.dart';
 import 'package:agri/features/farmdashboard/presentation/widgets/hardware_status.dart';
-import 'package:agri/features/farmdashboard/presentation/widgets/history_log_card.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class MainFarmScreen extends StatefulWidget {
   const MainFarmScreen({super.key});
@@ -63,7 +59,6 @@ class _MainFarmScreenState extends State<MainFarmScreen> {
               child: GridView(
                 physics: const BouncingScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  
                   crossAxisCount: 2,
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
@@ -121,25 +116,14 @@ class _MainFarmScreenState extends State<MainFarmScreen> {
                     }).toList(),
               ),
             ),
-          
-          
-          
-    _buildHistorySection(),
-          
+
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            //   child: HistoryScreen(), // بشرط إنه يكون shrinkWrapped داخليًا
+            // ),
           ],
         ),
       ),
     );
   }
-}
-
-Widget _buildHistorySection() {
-  return ChangeNotifierProvider(
-    create: (_) => HistoryController(FarmRepositoryImpl()),
-    child: Consumer<HistoryController>(
-      builder: (context, controller, _) {
-        return HistoryLogCard(historyLog: controller.historyLog);
-      },
-    ),
-  );
 }

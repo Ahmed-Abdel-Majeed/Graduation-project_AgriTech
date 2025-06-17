@@ -3,12 +3,14 @@ class TDSControl {
   final double min;
   final double max;
   final double doseAmount;
+  final double? currentValue; // <-- مضافة
 
   TDSControl({
     required this.isControlledByAI,
     required this.min,
     required this.max,
     required this.doseAmount,
+    this.currentValue, // <-- مضافة
   });
 
   factory TDSControl.fromJson(Map<String, dynamic> json) {
@@ -17,6 +19,7 @@ class TDSControl {
       min: (json['min'] as num?)?.toDouble() ?? 0.0,
       max: (json['max'] as num?)?.toDouble() ?? 0.0,
       doseAmount: (json['doseAmount'] as num?)?.toDouble() ?? 0.0,
+      currentValue: (json['currentValue'] as num?)?.toDouble(), // <-- optional
     );
   }
 
@@ -26,6 +29,7 @@ class TDSControl {
       'min': min,
       'max': max,
       'doseAmount': doseAmount,
+      // currentValue not included in sending back
     };
   }
 
@@ -34,12 +38,14 @@ class TDSControl {
     double? min,
     double? max,
     double? doseAmount,
+    double? currentValue,
   }) {
     return TDSControl(
       isControlledByAI: isControlledByAI ?? this.isControlledByAI,
       min: min ?? this.min,
       max: max ?? this.max,
       doseAmount: doseAmount ?? this.doseAmount,
+      currentValue: currentValue ?? this.currentValue,
     );
   }
 }
