@@ -1,4 +1,4 @@
-import 'package:agri/features/home/presentation/pages/sensor_data_dashboard.dart';
+import 'package:agri/features/home/presentation/screens/sensor_data_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';

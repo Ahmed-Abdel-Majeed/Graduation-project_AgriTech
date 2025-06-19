@@ -3,16 +3,14 @@ import 'package:agri/features/auth/presentation/pages/login_screen.dart';
 import 'package:agri/features/auth/presentation/pages/register_screen.dart';
 import 'package:agri/features/chat_bot/screens/chat_screen.dart';
 import 'package:agri/features/farmdashboard/presentation/pages/farm_dashboard.dart';
-import 'package:agri/features/home/presentation/screens/humidity_dashboard_screen.dart';
-import 'package:agri/features/home/presentation/screens/hydropoinc_dashboard_screen.dart';
-import 'package:agri/features/home/presentation/screens/temperature_dashboard_screen.dart';
-import 'package:agri/features/main/screens/main_screen.dart';
+import 'package:agri/features/home/presentation/screens/ai_analysis.dart';
+import 'package:agri/features/main/presentation/screens/main_screen.dart';
 import 'package:agri/features/welcome/screens/splash_screen.dart.dart';
 import 'package:agri/features/welcome/screens/welcome_screen.dart';
 import 'package:agri/ui/widgets/home_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../../features/plant_analysis/plant_monitoring_page.dart'
+import '../../features/plant_analysis/presentation/screens/plant_monitoring_page.dart'
     show PlantMonitoringPage;
 
 class AppRoutes {
@@ -31,8 +29,7 @@ class AppRoutes {
   static const String sensorDashboardPage = "/sensorDashboardPage";
   static const String sensorDashboardWebPage = "/sensorDashboardWebPage";
   static const String sensorDashboardMobilePage = "/sensorDashboardMobilePage";
-  static const String hydroponicDashboard = "/hydroponicDashboard";
-  static const String hydroponicDashboardWeb = "/hydroponicDashboardWeb";
+  static const String aiAnalysis = "/aiAnalysis";
   static const String chatScreen = "/chatScreen";
   static const String mainFarmScreen = "/mainFarmScreen";
   static const String farmdashboard = "/mainFarmScreen";
@@ -52,10 +49,10 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const MainScreen());
       case register:
         return MaterialPageRoute(builder: (_) => RegisterScreen());
-      case temperatureChartScreen:
-        return MaterialPageRoute(builder: (_) => TemperatureChartScreen());
-      case humidityChartScreen:
-        return MaterialPageRoute(builder: (_) => HumidityChartScreen());
+      // case temperatureChartScreen:
+      //   return MaterialPageRoute(builder: (_) => TemperatureChartScreen());
+      // case humidityChartScreen:
+      //   return MaterialPageRoute(builder: (_) => HumidityChartScreen());
       case welcome:
         return MaterialPageRoute(builder: (_) => WelcomeScreen());
       case farmdashboard:
@@ -68,8 +65,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const CropScanPage());
       case chatScreen:
         return MaterialPageRoute(builder: (_) => const ChatScreen());
-      case hydroponicDashboard:
-        return MaterialPageRoute(builder: (_) => const HydroponicDashboard());
+      case aiAnalysis:
+        return MaterialPageRoute(builder: (_) => const AiAnalysis());
 
 
       default:

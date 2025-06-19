@@ -1,9 +1,9 @@
 // lib/features/plant_monitoring/presentation/screens/plant_monitoring_page.dart
 
 import 'package:flutter/material.dart';
-import '../../domain/entities/plant.dart';
-import '../home/presentation/widgets/parameter_card.dart';
-import '../home/presentation/widgets/plant_card.dart';
+import '../../../../domain/entities/plant.dart';
+import '../widgets/parameter_card.dart';
+import '../widgets/plant_card.dart';
 import 'plant_detail_page.dart';
 
 class PlantMonitoringPage extends StatefulWidget {

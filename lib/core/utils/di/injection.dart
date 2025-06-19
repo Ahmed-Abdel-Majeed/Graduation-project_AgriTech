@@ -43,9 +43,9 @@ void setupDependencies() {
     getIt.registerFactory<AuthCubit>(() => AuthCubit(getIt<UserRepository>()));
   }
 
-  if (!getIt.isRegistered<SensorCubit>()) {
-    getIt.registerFactory<SensorCubit>(
-      () => SensorCubit(getIt<SensorRepository>()),
-    );
-  }
+  // if (!getIt.isRegistered<SensorCubit>()) {
+  //   getIt.registerFactory<SensorCubit>(
+  //     () => SensorCubit(getIt<SensorRepository>()),
+  //   );
+  // }
 }

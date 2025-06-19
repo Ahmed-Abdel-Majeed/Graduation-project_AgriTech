@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/plant.dart';
+import '../../../../domain/entities/plant.dart';
 
 class PlantDetailPage extends StatelessWidget {
   final Plant plant;

@@ -3,9 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/camera/screens/crop_scan_page.dart';
-import '../../features/home/presentation/screens/hydropoinc_dashboard_screen.dart';
-import '../../features/plant_analysis/plant_monitoring_page.dart';
-import '../../features/main/screens/main_screen.dart';
+import '../../features/home/presentation/screens/ai_analysis.dart';
+import '../../features/plant_analysis/presentation/screens/plant_monitoring_page.dart';
+import '../../features/main/presentation/screens/main_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildBody() {
     final pages = [
       const MainScreen(),
-      const HydroponicDashboard(),
+      const AiAnalysis(),
       const CropScanPage(),
       const PlantMonitoringPage(),
       MainFarmScreen(),

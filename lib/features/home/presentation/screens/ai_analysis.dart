@@ -3,17 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../domain/entities/sensor_reading.dart';
 import '../widgets/ai_insights_section.dart';
-import '../widgets/sensor_line_chart.dart';
 import '../widgets/top_metrics_row.dart';
 
-class HydroponicDashboard extends StatefulWidget {
-  const HydroponicDashboard({super.key});
+class AiAnalysis extends StatefulWidget {
+  const AiAnalysis({super.key});
 
   @override
-  State<HydroponicDashboard> createState() => _HydroponicDashboardState();
+  State<AiAnalysis> createState() => _AiAnalysisState();
 }
 
-class _HydroponicDashboardState extends State<HydroponicDashboard> {
+class _AiAnalysisState extends State<AiAnalysis> {
   final List<SensorReading> readings = [
     SensorReading(
       time: DateTime.now().subtract(const Duration(minutes: 25)),
@@ -111,7 +110,7 @@ class _HydroponicDashboardState extends State<HydroponicDashboard> {
               const SizedBox(height: 16),
         kIsWeb ?   SizedBox():   TopMetricsRow(readings: readings),
               const SizedBox(height: 16),
-              SensorLineChart(readings: readings),
+              // SensorLineChart(readings: readings),
               const SizedBox(height: 16),
               const AiInsightsSection(),
               const SizedBox(height: 16),
