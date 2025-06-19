@@ -3,9 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/camera/screens/crop_scan_page.dart';
-import '../../features/main/presentation/dashboard/screens/hydropoinc_dashboard_screen.dart';
-import '../../features/main/presentation/dashboard/screens/plant_monitoring_page.dart';
-import '../../features/main/presentation/main/screens/main_screen.dart';
+import '../../features/home/presentation/screens/hydropoinc_dashboard_screen.dart';
+import '../../features/plant_analysis/plant_monitoring_page.dart';
+import '../../features/main/screens/main_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

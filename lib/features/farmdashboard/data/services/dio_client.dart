@@ -9,6 +9,11 @@ class DioClient {
 
   final Dio _dio = Dio();
   final Logger _logger = Logger(
+
+    level: Level.debug,
+    filter: ProductionFilter(),
+    output: ConsoleOutput(),
+    
     printer: PrettyPrinter(
       methodCount: 0,
       errorMethodCount: 5,

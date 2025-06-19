@@ -2,18 +2,17 @@ import 'package:agri/features/camera/screens/crop_scan_page.dart';
 import 'package:agri/features/auth/presentation/pages/login_screen.dart';
 import 'package:agri/features/auth/presentation/pages/register_screen.dart';
 import 'package:agri/features/chat_bot/screens/chat_screen.dart';
-import 'package:agri/features/farmdashboard/presentation/pages/main_farm_screen.dart';
 import 'package:agri/features/farmdashboard/presentation/pages/farm_dashboard.dart';
-import 'package:agri/features/main/presentation/dashboard/screens/humidity_dashboard_screen.dart';
-import 'package:agri/features/main/presentation/dashboard/screens/hydropoinc_dashboard_screen.dart';
-import 'package:agri/features/main/presentation/dashboard/screens/temperature_dashboard_screen.dart';
-import 'package:agri/features/main/presentation/main/screens/main_screen.dart';
-import 'package:agri/features/main/presentation/welcome/screens/splash_screen.dart.dart';
-import 'package:agri/features/main/presentation/welcome/screens/welcome_screen.dart';
+import 'package:agri/features/home/presentation/screens/humidity_dashboard_screen.dart';
+import 'package:agri/features/home/presentation/screens/hydropoinc_dashboard_screen.dart';
+import 'package:agri/features/home/presentation/screens/temperature_dashboard_screen.dart';
+import 'package:agri/features/main/screens/main_screen.dart';
+import 'package:agri/features/welcome/screens/splash_screen.dart.dart';
+import 'package:agri/features/welcome/screens/welcome_screen.dart';
 import 'package:agri/ui/widgets/home_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../../features/main/presentation/dashboard/screens/plant_monitoring_page.dart'
+import '../../features/plant_analysis/plant_monitoring_page.dart'
     show PlantMonitoringPage;
 
 class AppRoutes {
@@ -49,8 +48,6 @@ class AppRoutes {
         );
       case splash:
         return MaterialPageRoute(builder: (_) => SplashScreen());
-      case splash:
-        return MaterialPageRoute(builder: (_) => SplashScreen());
       case mainScreen:
         return MaterialPageRoute(builder: (_) => const MainScreen());
       case register:
@@ -74,8 +71,6 @@ class AppRoutes {
       case hydroponicDashboard:
         return MaterialPageRoute(builder: (_) => const HydroponicDashboard());
 
-      case mainFarmScreen:
-        return MaterialPageRoute(builder: (_) => const MainFarmScreen());
 
       default:
         return MaterialPageRoute(

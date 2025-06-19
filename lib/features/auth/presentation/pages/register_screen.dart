@@ -14,6 +14,8 @@ class RegisterScreen extends StatelessWidget {
     return BlocProvider(
       create: (_) => AuthCubit(getIt<UserRepository>()),
       child: Scaffold(
+          resizeToAvoidBottomInset: true, 
+
   
       body:    SizedBox(
         width: double.infinity,

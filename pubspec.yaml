@@ -39,6 +39,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.0
+  flutter_screenutil: ^5.9.3
   geocoding: ^3.0.0
   geolocator: ^13.0.4
   get_it: ^8.0.3

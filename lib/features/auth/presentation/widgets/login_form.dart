@@ -3,14 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:agri/config/routes/app_routes.dart';
 import 'package:agri/features/auth/presentation/cuibt/auth_cubit.dart';
 import 'package:agri/features/auth/presentation/cuibt/auth_state.dart';
-import 'package:screenwise/screenwise.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../main/presentation/shared/widgets/custom_button.dart';
+import '../../../../core/utils/custom_button.dart';
 import 'login_header.dart';
 import 'social_login_buttons.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+  const 
+  LoginForm({super.key});
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -22,8 +23,6 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double padding = width > 600 ? width * 0.4 : width * 0.05;
 
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) async {
@@ -39,20 +38,18 @@ class _LoginFormState extends State<LoginForm> {
         }
       },
       builder: (context, state) {
-        return SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const LoginHeader(),
-                const SizedBox(height: 30),
+                SizedBox(height: 30.h),
                 // TextField for Email
-                ResponsiveContainer(
-                  mobileWidthFraction: 1.0,
-                  tabletWidthFraction: 0.55,
-                  desktopWidthFraction: 0.36,
-
+                SizedBox(
+                  width: 333.w  ,
+            
                   child: TextField(
                     controller: _emailController,
                     decoration: InputDecoration(
@@ -66,12 +63,10 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                 SizedBox(height: 15.h),
                 // TextField for Password
-                ResponsiveContainer(
-                  mobileWidthFraction: 1.0,
-                  tabletWidthFraction: 0.55,
-                  desktopWidthFraction: 0.36,
+                SizedBox(
+                  width: 333.w  ,
                   child: TextField(
                     controller: _passwordController,
                     obscureText: true,
@@ -87,39 +82,29 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                 ),
                 // const SizedBox(height: 20),
-                ResponsiveContainer(
-                  mobileWidthFraction: 1.0,
-                  tabletWidthFraction: 0.55,
-                  desktopWidthFraction: 0.36,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: const Text(
-                        'Forgot Password?',
-                        style: TextStyle(color: Colors.black54),
-                      ),
+                TextButton(
+                  onPressed: () {},
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: const Text(
+                      'Forgot Password?',
+                      style: TextStyle(color: Colors.black54),
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                 SizedBox(height: 17.h),
                 state is AuthLoading
                     ? const CircularProgressIndicator()
-                    : ResponsiveContainer(
-                      mobileWidthFraction: 1.0,
-                      tabletWidthFraction: 0.55,
-                      desktopWidthFraction: 0.36,
-                      child: CustomElevatedButton(
-                        text: 'Login',
-                        onPressed: () {
-                          context.read<AuthCubit>().signIn(
-                            _emailController.text,
-                            _passwordController.text,
-                          );
-                        },
-                      ),
+                    : CustomElevatedButton(
+                      text: 'Login',
+                      onPressed: () {
+                        context.read<AuthCubit>().signIn(
+                          _emailController.text,
+                          _passwordController.text,
+                        );
+                      },
                     ),
-                const SizedBox(height: 20),
+                 SizedBox(height: 10.h),
                 const Row(
                   children: [
                     Expanded(
@@ -137,9 +122,9 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                 SizedBox(height: 15.h),
                 const SocialLoginButtons(),
-                const SizedBox(height: 50),
+                 SizedBox(height: 15.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

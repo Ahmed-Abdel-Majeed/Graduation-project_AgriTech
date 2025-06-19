@@ -1,7 +1,7 @@
-import 'package:agri/features/main/sensor/sensor_cubit.dart';
+import 'package:agri/features/home/cubit/sensor/sensor_cubit.dart';
 import 'package:agri/data/repositories/sensor_repository.dart';
 import 'package:agri/features/auth/presentation/cuibt/auth_cubit.dart';
-import 'package:agri/features/main/service/api_service.dart';
+import 'package:agri/features/home/service/api_service.dart';
 import 'package:agri/core/network/app_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';

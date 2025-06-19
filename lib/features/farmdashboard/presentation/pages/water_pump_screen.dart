@@ -37,9 +37,9 @@ class _WaterPumpControlScreenState extends State<WaterPumpControlScreen> {
         const SnackBar(content: Text("Water pump settings updated")),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error updating: $e")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error updating: $e")));
     } finally {
       setState(() => isLoading = false);
     }
@@ -62,80 +62,110 @@ class _WaterPumpControlScreenState extends State<WaterPumpControlScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Water Pump Control")),
-      body: control == null
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Chip(
-                        avatar: const Icon(Icons.warning_amber_rounded, size: 18),
-                        label: Text(
-                          control!.isCurrentlyRunning ? "Pump ON" : "Pump OFF",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: control!.isCurrentlyRunning ? Colors.green : Colors.black87,
+      body:
+          control == null
+              ? const Center(child: CircularProgressIndicator())
+              : Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: [
+                    Row(
+                      children: [
+                        Chip(
+                          avatar: const Icon(
+                            Icons.warning_amber_rounded,
+                            size: 18,
                           ),
+                          label: Text(
+                            control!.isCurrentlyRunning
+                                ? "Pump ON"
+                                : "Pump OFF",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color:
+                                  control!.isCurrentlyRunning
+                                      ? Colors.green
+                                      : Colors.black87,
+                            ),
+                          ),
+                          backgroundColor:
+                              control!.isCurrentlyRunning
+                                  ? Colors.green.shade100
+                                  : Colors.grey.shade200,
                         ),
-                        backgroundColor: control!.isCurrentlyRunning
-                            ? Colors.green.shade100
-                            : Colors.grey.shade200,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Manual",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Switch(
+                              value: control!.isControlledByAI,
+                              onChanged:
+                                  isLoading
+                                      ? null
+                                      : (val) {
+                                        final updated = control!.copyWith(
+                                          isControlledByAI: val,
+                                        );
+                                        _updateControl(updated);
+                                      },
+                            ),
+                            const Text(
+                              "AI",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    const Text(
+                      "Run Duration per Hour (minutes)",
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    const SizedBox(height: 8),
+                    TextField(
+                      enabled: !control!.isControlledByAI && !isLoading,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: false,
                       ),
-                      Row(
-                        children: [
-                          const Text("Manual", style: TextStyle(fontWeight: FontWeight.bold)),
-                          Switch(
-                            value: control!.isControlledByAI,
-                            onChanged: isLoading
+                      controller: durationController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed:
+                            isLoading || control!.isControlledByAI
                                 ? null
-                                : (val) {
-                                    final updated = control!.copyWith(
-                                      isControlledByAI: val,
+                                : () {
+                                  final v = int.tryParse(
+                                    durationController.text,
+                                  );
+                                  if (v != null) {
+                                    _updateControl(
+                                      control!.copyWith(durationMinutes: v),
                                     );
-                                    _updateControl(updated);
-                                  },
-                          ),
-                          const Text("AI", style: TextStyle(fontWeight: FontWeight.bold)),
-                        ],
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  const Text("Run Duration per Hour (minutes)", style: TextStyle(fontWeight: FontWeight.w500)),
-                  const SizedBox(height: 8),
-                  TextField(
-                    enabled: !control!.isControlledByAI && !isLoading,
-                    keyboardType: const TextInputType.numberWithOptions(decimal: false),
-                    controller: durationController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                                  }
+                                },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                        ),
+                        child: const Text('SAVE PUMP DURATION'),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: isLoading || control!.isControlledByAI
-                          ? null
-                          : () {
-                              final v = int.tryParse(durationController.text);
-                              if (v != null) {
-                                _updateControl(control!.copyWith(durationMinutes: v));
-                              }
-                            },
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                      child: const Text('SAVE PUMP DURATION'),
-                    ),
-                  )
-                ],
+                  ],
+                ),
               ),
-            ),
     );
   }
 }
