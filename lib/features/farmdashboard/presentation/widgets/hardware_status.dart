@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HardwareStatus extends StatelessWidget {
   const HardwareStatus({super.key});
@@ -12,35 +13,37 @@ class HardwareStatus extends StatelessWidget {
         children: [
           Text(
             'System Status',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8.w),
           Container(
-            width: 190,
-            height: 50,
+            width: 170.w,
+            height: 30.h,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(55),
-    
+
               border: Border.all(
                 color: Color.fromARGB(255, 12, 220, 19),
-    
-                width: 1,
+                width: 1.w,
               ),
-              // color: Colors.green
             ),
-            child: ListTile(
-              leading: const Icon(
-                Icons.settings_remote,
-                color: Color.fromARGB(255, 12, 220, 19),
-              ),
-              title: const Text(
-                'Hardware: Idle',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Hardware: Idle',
+                  style: TextStyle(
+                    fontSize: 11.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 12, 220, 19),
+                  ),
+                ),
+                Icon(
+                  Icons.settings_remote,
+                  size: 18.sp,
                   color: Color.fromARGB(255, 12, 220, 19),
                 ),
-              ),
+              ],
             ),
           ),
         ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:agri/features/farmdashboard/data/services/farm_api_service.dart';
 import 'package:agri/features/farmdashboard/domain/models/tds_control.dart';
 
@@ -12,33 +13,20 @@ class TDSScreen extends StatefulWidget {
 class _TDSScreenState extends State<TDSScreen> {
   TDSControl? tdsControl;
   bool isLoading = false;
-  double? currentTDS;
+  final doseController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     _loadControl();
-    _loadData();
-  }
-
-  Future<void> _loadData() async {
-    try {
-      final control = await FarmAPI.fetchTDSControl();
-      final home = await FarmAPI.getDashboardHome();
-      
-      setState(() {
-        tdsControl = control;
-        currentTDS = home.lastReading.tds;
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error loading TDS: $e')));
-    }
   }
 
   Future<void> _loadControl() async {
     final result = await FarmAPI.fetchTDSControl();
-    setState(() => tdsControl = result);
+    setState(() {
+      tdsControl = result;
+      doseController.text = result.doseAmount.toString();
+    });
   }
 
   Future<void> _updateControl(TDSControl updated) async {
@@ -46,30 +34,25 @@ class _TDSScreenState extends State<TDSScreen> {
     try {
       await FarmAPI.updateTDSControl(updated);
       setState(() => tdsControl = updated);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('TDS settings updated')));
+      _showMessage('TDS settings updated');
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      _showMessage('Error: $e');
     } finally {
       setState(() => isLoading = false);
     }
   }
 
-  Future<void> _submitDose(double amount) async {
+  Future<void> _submitDose() async {
+    final amount = double.tryParse(doseController.text) ?? 0;
+    if (amount <= 0) return;
+
     setState(() => isLoading = true);
     try {
       await FarmAPI.updateTDSDose(amount);
       await _loadControl();
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Dose scheduled')));
+      _showMessage('Dose scheduled');
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      _showMessage('Error: $e');
     } finally {
       setState(() => isLoading = false);
     }
@@ -80,96 +63,113 @@ class _TDSScreenState extends State<TDSScreen> {
     await _loadControl();
   }
 
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
+  @override
+  void dispose() {
+    doseController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('TDS Control')),
-      body:
-          tdsControl == null
-              ? const Center(child: CircularProgressIndicator())
-              : SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
+      appBar: AppBar(title: Text('TDS Control', style: TextStyle(fontSize: 18.sp))),
+      body: tdsControl == null
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              padding: EdgeInsets.all(16.w),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildStatusRow(),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'Set TDS Range',
-                      style: TextStyle(fontWeight: FontWeight.w600),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Text("Manual"),
+                        Switch(
+                          value: tdsControl!.isControlledByAI,
+                          onChanged: (val) => _updateControl(
+                            tdsControl!.copyWith(isControlledByAI: val),
+                          ),
+                        ),
+                        const Text("AI"),
+                      ],
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 20.h),
+                    Text('Set TDS Range',
+                        style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
+                    SizedBox(height: 10.h),
                     Row(
                       children: [
                         Expanded(
-                          child: _buildInput(
+                          child: _buildNumberInput(
                             'Min TDS',
-
                             tdsControl!.min,
                             (v) => _updateControl(tdsControl!.copyWith(min: v)),
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        SizedBox(width: 16.w),
                         Expanded(
-                          child: _buildInput(
+                          child: _buildNumberInput(
                             'Max TDS',
-
                             tdsControl!.max,
                             (v) => _updateControl(tdsControl!.copyWith(max: v)),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 20.h),
                     SizedBox(
                       width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed:
-                            isLoading || tdsControl!.isControlledByAI
-                                ? null
-                                : () => _updateControl(tdsControl!),
+                      child: ElevatedButton.icon(
+                        icon: const Icon(Icons.save),
+                        label: const Text('SAVE TDS RANGE'),
+                        onPressed: isLoading || tdsControl!.isControlledByAI
+                            ? null
+                            : () => _updateControl(tdsControl!),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
+                          padding: EdgeInsets.symmetric(vertical: 12.h),
                         ),
-                        child: const Text('SAVE TDS RANGE'),
                       ),
                     ),
-                    const SizedBox(height: 24),
-                    const Text(
-                      'Manual Dosing',
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(height: 12),
-                    _buildDoseField('Dose Amount (mL)', tdsControl!.doseAmount),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 24.h),
+                    Text('Manual Dosing',
+                        style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
+                    SizedBox(height: 12.h),
+                    _buildDoseInput(),
+                    SizedBox(height: 16.h),
                     Row(
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            onPressed:
-                                isLoading || tdsControl!.isControlledByAI
-                                    ? null
-                                    : () => _submitDose(tdsControl!.doseAmount),
+                            onPressed: isLoading || tdsControl!.isControlledByAI
+                                ? null
+                                : _submitDose,
                             child: const Text('SCHEDULE DOSE'),
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12.w),
                         Expanded(
                           child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                            ),
                             onPressed: isLoading ? null : _cancelDose,
+                            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                             child: const Text('CANCEL DOSE'),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Note: Dosing commands are sent to hardware after a 10-minute delay, allowing cancellation.',
+                    SizedBox(height: 16.h),
+                    Text(
+                      'Note: Dosing commands are sent to hardware after a 10-minute delay.',
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 12.sp,
                         fontStyle: FontStyle.italic,
                         color: Colors.black54,
                       ),
@@ -177,66 +177,36 @@ class _TDSScreenState extends State<TDSScreen> {
                   ],
                 ),
               ),
-    );
-  }
-
-  Widget _buildStatusRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Chip(
-          label: Text(
-            'Current TDS: ${tdsControl!.currentValue?.toStringAsFixed(2)}',
-          ),
-        ),
-        Row(
-          children: [
-            const Text("Manual"),
-            Switch(
-              value: tdsControl!.isControlledByAI,
-              onChanged:
-                  (val) => _updateControl(
-                    tdsControl!.copyWith(isControlledByAI: val),
-                  ),
             ),
-            const Text("AI"),
-          ],
-        ),
-      ],
     );
   }
 
-  Widget _buildInput(String label, double value, Function(double) onChanged) {
-    final controller = TextEditingController(text: value.toStringAsFixed(1));
+  Widget _buildNumberInput(String label, double value, Function(double) onChanged) {
+    final controller = TextEditingController(text: value.toString());
     return TextField(
       enabled: !tdsControl!.isControlledByAI && !isLoading,
       controller: controller,
       decoration: InputDecoration(
         labelText: label,
-        border: const OutlineInputBorder(),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.r)),
+        isDense: true,
       ),
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       onSubmitted: (val) => onChanged(double.tryParse(val) ?? value),
     );
   }
 
-  Widget _buildDoseField(String label, double value) {
-    final controller = TextEditingController(text: value.toStringAsFixed(1));
+  Widget _buildDoseInput() {
     return TextField(
+      controller: doseController,
       enabled: !tdsControl!.isControlledByAI && !isLoading,
-      controller: controller,
       decoration: InputDecoration(
-        labelText: label,
-        border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(16)),
-        ),
+        labelText: 'Dose Amount (mL)',
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.r)),
+        prefixIcon: const Icon(Icons.local_drink),
         isDense: true,
       ),
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      onChanged: (val) {
-        final parsed = double.tryParse(val) ?? value;
-        setState(() => tdsControl = tdsControl!.copyWith(doseAmount: parsed));
-      },
     );
   }
 }

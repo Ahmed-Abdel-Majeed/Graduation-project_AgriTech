@@ -1,6 +1,8 @@
 import 'package:agri/config/routes/app_routes.dart';
+import 'package:agri/features/farmdashboard/presentation/pages/history_log_screen.dart';
 import 'package:agri/features/farmdashboard/presentation/widgets/hardware_status.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MainFarmScreen extends StatefulWidget {
   const MainFarmScreen({super.key});
@@ -35,94 +37,88 @@ class _MainFarmScreenState extends State<MainFarmScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Color.fromARGB(0, 0, 0, 0)),
-        title: const Text(
+        title: Text(
           "Farm Dashboard",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
-              children: [
-                const SizedBox(width: 8),
-                Expanded(child: const HardwareStatus()),
-              ],
-            ),
-            Divider(color: Colors.grey.shade300, thickness: 1, height: 1),
-            const SizedBox(height: 10),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.55,
-              child: GridView(
-                physics: const BouncingScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  childAspectRatio: .82,
-                ),
-                children:
-                    farmMange.map((e) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            AppRoutes.farmdashboard,
-                            arguments: e['index'],
-                          );
-                        },
-                        child: Card(
-                          color: Colors.grey.shade300,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          elevation: 11,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(0),
-                                child: Container(
-                                  height: 200,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white,
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                        e['photo'] ??
-                                            'assets/images/default_image.png',
-                                      ),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                e['name'] ?? 'No Name',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+      body: Column(
+        children: [
+          Row(
+            children: [
+              const SizedBox(width: 8),
+              Expanded(child: const HardwareStatus()),
+            ],
+          ),
+          Divider(color: Colors.grey.shade300, thickness: 1, height: 1),
+          const SizedBox(height: 10),
+          GridView.count(
+            physics:
+                const NeverScrollableScrollPhysics(),
+            shrinkWrap: true, 
+            crossAxisCount: 2,
+            mainAxisSpacing: 10.h,
+            crossAxisSpacing: 10.w,
+            childAspectRatio: 2*(width/height),
+            children:
+                farmMange.map((e) {
+                  return InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        AppRoutes.farmdashboard,
+                        arguments: e['index'],
                       );
-                    }).toList(),
-              ),
-            ),
-
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            //   child: HistoryScreen(), // بشرط إنه يكون shrinkWrapped داخليًا
-            // ),
-          ],
-        ),
+                    },
+                    child: Card(
+                      color: Colors.grey.shade300,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 11,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 140,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  e['photo'] ??
+                                      'assets/images/default_image.png',
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            e['name'] ?? 'No Name',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
+          ),
+      Divider(thickness: .5,),
+        SizedBox(
+          height: 150.h,
+          child: HistoryScreen())
+        ],
       ),
     );
   }

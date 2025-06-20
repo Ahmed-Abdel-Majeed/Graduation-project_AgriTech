@@ -27,10 +27,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Farm History'),
-        centerTitle: true,
-      ),
+
       body: FutureBuilder<List<FarmHistoryItem>>(
         future: _historyFuture,
         builder: (context, snapshot) {

@@ -1,8 +1,8 @@
+import 'package:agri/features/home/presentation/widgets/ai_insights_section.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../domain/entities/sensor_reading.dart';
-import '../widgets/ai_insights_section.dart';
 import '../widgets/top_metrics_row.dart';
 
 class AiAnalysis extends StatefulWidget {
@@ -18,7 +18,7 @@ class _AiAnalysisState extends State<AiAnalysis> {
       time: DateTime.now().subtract(const Duration(minutes: 25)),
       ph: 5.4,
       airtemp: 23.2,
-      ec: 2.8,
+      tds: 2.8,
       waterLevel: 52.8,
       watertemp: 66.3, humidity: 50.0,
     ),
@@ -27,7 +27,7 @@ class _AiAnalysisState extends State<AiAnalysis> {
       time: DateTime.now().subtract(const Duration(minutes: 20)),
       ph: 5.3,
       airtemp: 23.2,
-      ec: 2.8,
+      tds: 2.8,
       waterLevel: 52.8,
       watertemp: 66.3,
     ),
@@ -35,7 +35,7 @@ class _AiAnalysisState extends State<AiAnalysis> {
       time: DateTime.now().subtract(const Duration(minutes: 15)),
       ph: 5.2,
       airtemp: 23.1,
-      ec: 2.9,
+      tds: 2.9,
       waterLevel: 52.5,
       watertemp: 66.3,
        humidity: 50.0,
@@ -44,7 +44,7 @@ class _AiAnalysisState extends State<AiAnalysis> {
       time: DateTime.now().subtract(const Duration(minutes: 10)),
       ph: 5.3,
       airtemp: 23.2,
-      ec: 2.7,
+      tds: 2.7,
       waterLevel: 53.0,
       watertemp: 66.3,
        humidity: 50.0,
@@ -53,7 +53,7 @@ class _AiAnalysisState extends State<AiAnalysis> {
       time: DateTime.now().subtract(const Duration(minutes: 5)),
       ph: 5.4,
       airtemp: 23.2,
-      ec: 2.8,
+      tds: 2.8,
       waterLevel: 52.9,
       watertemp: 66.3,
        humidity: 50.0,
@@ -62,7 +62,7 @@ class _AiAnalysisState extends State<AiAnalysis> {
       time: DateTime.now(),
       ph: 5.4,
       airtemp: 23.2,
-      ec: 2.8,
+      tds: 2.8,
       waterLevel: 52.8,
       watertemp: 66.3,
        humidity: 50.0,
@@ -110,7 +110,7 @@ class _AiAnalysisState extends State<AiAnalysis> {
               const SizedBox(height: 16),
         kIsWeb ?   SizedBox():   TopMetricsRow(readings: readings),
               const SizedBox(height: 16),
-              // SensorLineChart(readings: readings),
+              // SensorLintdshart(readings: readings),
               const SizedBox(height: 16),
               const AiInsightsSection(),
               const SizedBox(height: 16),

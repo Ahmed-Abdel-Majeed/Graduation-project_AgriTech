@@ -1,4 +1,5 @@
-import 'package:agri/features/camera/screens/crop_scan_page.dart';
+import 'package:agri/features/ai_scan_analysis/plan_scan_ai.dart';
+import 'package:agri/features/plant_analysis/screens/plant_analysis_screen.dart';
 import 'package:agri/features/auth/presentation/pages/login_screen.dart';
 import 'package:agri/features/auth/presentation/pages/register_screen.dart';
 import 'package:agri/features/chat_bot/screens/chat_screen.dart';
@@ -10,8 +11,6 @@ import 'package:agri/features/welcome/screens/welcome_screen.dart';
 import 'package:agri/ui/widgets/home_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../../features/plant_analysis/presentation/screens/plant_monitoring_page.dart'
-    show PlantMonitoringPage;
 
 class AppRoutes {
   static const String welcome = "/welcome";
@@ -33,6 +32,14 @@ class AppRoutes {
   static const String chatScreen = "/chatScreen";
   static const String mainFarmScreen = "/mainFarmScreen";
   static const String farmdashboard = "/mainFarmScreen";
+  static const String farmAnalysisScreen = "/farmAnalysisScreen";
+    static const String farmAnalysisHome = '/farm-analysis';
+  static const String farmAnalysisSummary = '/farm-analysis/summary';
+  static const String farmAnalysisDetail = '/farm-analysis/detail';
+  static const String plantAnalysisScreen = '/plantAnalysisScreen';
+  static const String planScanAi = '/planScanAi';
+
+
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -49,20 +56,18 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const MainScreen());
       case register:
         return MaterialPageRoute(builder: (_) => RegisterScreen());
-      // case temperatureChartScreen:
-      //   return MaterialPageRoute(builder: (_) => TemperatureChartScreen());
-      // case humidityChartScreen:
-      //   return MaterialPageRoute(builder: (_) => HumidityChartScreen());
+  
       case welcome:
         return MaterialPageRoute(builder: (_) => WelcomeScreen());
       case farmdashboard:
         final args = settings.arguments as int;
         return MaterialPageRoute(builder: (_) => FarmDashboard(index: args));
+      case planScanAi:
+        
+        return MaterialPageRoute(builder: (_) => PlanScanAi());
 
-      case plantMonitoringPage:
-        return MaterialPageRoute(builder: (_) => const PlantMonitoringPage());
-      case cropScanPage:
-        return MaterialPageRoute(builder: (_) => const CropScanPage());
+      case plantAnalysisScreen:
+        return MaterialPageRoute(builder: (_) => const PlantAnalysisScreen());
       case chatScreen:
         return MaterialPageRoute(builder: (_) => const ChatScreen());
       case aiAnalysis:

@@ -3,7 +3,7 @@ class SensorReading {
   final double ph;
   final double airtemp;
   final double watertemp;
-  final double ec;
+  final double tds;
   final double waterLevel;
   final double humidity;
 
@@ -12,7 +12,7 @@ class SensorReading {
     required this.ph,
     required this.airtemp,
     required this.watertemp,
-    required this.ec,
+    required this.tds,
     required this.waterLevel,
     required this.humidity,
   });

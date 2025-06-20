@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:agri/features/farmdashboard/data/services/farm_api_service.dart';
 import 'package:agri/features/farmdashboard/domain/models/ph_control.dart';
 import 'package:agri/features/farmdashboard/domain/models/dose_types.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PHScreen extends StatefulWidget {
   const PHScreen({super.key});
@@ -13,13 +14,23 @@ class PHScreen extends StatefulWidget {
 class _PHScreenState extends State<PHScreen> {
   bool isLoading = false;
   PHControl? control;
-  double upDose = 0;
-  double downDose = 0;
+
+  final TextEditingController minPHController = TextEditingController();
+  final TextEditingController maxPHController = TextEditingController();
+  final TextEditingController upDoseController = TextEditingController();
+  final TextEditingController downDoseController = TextEditingController();
 
   Future<void> _loadControl() async {
     try {
       final result = await FarmAPI.fetchPHControl();
-      setState(() => control = result);
+      control = result;
+
+      minPHController.text = result.min.toStringAsFixed(1);
+      maxPHController.text = result.max.toStringAsFixed(1);
+      upDoseController.clear();
+      downDoseController.clear();
+
+      setState(() {});
     } catch (e) {
       ScaffoldMessenger.of(
         context,
@@ -27,11 +38,15 @@ class _PHScreenState extends State<PHScreen> {
     }
   }
 
-  Future<void> _updateControl(PHControl updated) async {
+  Future<void> _updateControlRange() async {
+    final min = double.tryParse(minPHController.text) ?? control!.min;
+    final max = double.tryParse(maxPHController.text) ?? control!.max;
+
     setState(() => isLoading = true);
     try {
+      final updated = control!.copyWith(min: min, max: max);
       await FarmAPI.updatePHControl(updated);
-      setState(() => control = updated);
+      control = updated;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text("pH settings updated")));
@@ -44,36 +59,62 @@ class _PHScreenState extends State<PHScreen> {
     }
   }
 
-  Future<void> _submitDose(DoseType type, double amount) async {
+  Future<void> _submitDose(DoseType type) async {
+    final value =
+        type == DoseType.up
+            ? double.tryParse(upDoseController.text)
+            : double.tryParse(downDoseController.text);
+
+    if (value == null || value <= 0) return;
+
     setState(() => isLoading = true);
     try {
-      await FarmAPI.schedulePhDose(type, amount);
+      await FarmAPI.schedulePhDose(type, value);
       await _loadControl();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Scheduled pH ${type == DoseType.up ? "UP" : "DOWN"} dose ($amount mL)',
+            'Scheduled pH ${type == DoseType.up ? "UP" : "DOWN"} dose ($value mL)',
           ),
         ),
       );
     } catch (e) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
     } finally {
       setState(() => isLoading = false);
     }
   }
 
-  Future<void> _cancelDose() async {
-    await FarmAPI.cancelPhDose();
-    await _loadControl();
+  Future<void> _toggleAIMode(bool val) async {
+    setState(() => isLoading = true);
+    try {
+      final updated = control!.copyWith(isControlledByAI: val);
+      await FarmAPI.updatePHControl(updated);
+      control = updated;
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error switching mode: $e")));
+    } finally {
+      setState(() => isLoading = false);
+    }
   }
 
   @override
   void initState() {
     super.initState();
     _loadControl();
+  }
+
+  @override
+  void dispose() {
+    minPHController.dispose();
+    maxPHController.dispose();
+    upDoseController.dispose();
+    downDoseController.dispose();
+    super.dispose();
   }
 
   @override
@@ -88,7 +129,7 @@ class _PHScreenState extends State<PHScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildStatusRow(),
+                    _buildAIModeSwitch(),
                     const SizedBox(height: 20),
                     const Text(
                       'Set pH Range',
@@ -98,19 +139,11 @@ class _PHScreenState extends State<PHScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: _buildInput(
-                            'Min pH',
-                            control!.min,
-                            (v) => _updateControl(control!.copyWith(min: v)),
-                          ),
+                          child: _buildInputField("Min pH", minPHController),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
-                          child: _buildInput(
-                            'Max pH',
-                            control!.max,
-                            (v) => _updateControl(control!.copyWith(max: v)),
-                          ),
+                          child: _buildInputField("Max pH", maxPHController),
                         ),
                       ],
                     ),
@@ -121,11 +154,14 @@ class _PHScreenState extends State<PHScreen> {
                         onPressed:
                             isLoading || control!.isControlledByAI
                                 ? null
-                                : () => _updateControl(control!),
+                                : _updateControlRange,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
                         ),
-                        child: const Text('SAVE PH RANGE'),
+                        child: Text(
+                          'SAVE PH RANGE',
+                          style: TextStyle(fontSize: 18.sp),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -134,9 +170,17 @@ class _PHScreenState extends State<PHScreen> {
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 16),
-                    _buildDoseRow('pH UP Amount (mL)', upDose, true),
+                    _buildDoseRow(
+                      'pH UP Amount (mL)',
+                      upDoseController,
+                      DoseType.up,
+                    ),
                     const SizedBox(height: 12),
-                    _buildDoseRow('pH Down Amount (mL)', downDose, false),
+                    _buildDoseRow(
+                      'pH DOWN Amount (mL)',
+                      downDoseController,
+                      DoseType.down,
+                    ),
                     const SizedBox(height: 16),
                     const Text(
                       'Note: Dosing commands are sent to hardware after a 10-minute delay, allowing cancellation.',
@@ -152,47 +196,38 @@ class _PHScreenState extends State<PHScreen> {
     );
   }
 
-  Widget _buildStatusRow() {
+  Widget _buildAIModeSwitch() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Chip(
-          label: Text(
-            'Current pH: ${control!.currentValue.toStringAsFixed(2)}',
-          ),
+        Text("Manual", style: TextStyle(fontSize: 15.sp)),
+        Switch(
+          value: control!.isControlledByAI,
+          onChanged: isLoading ? null : _toggleAIMode,
         ),
-        Row(
-          children: [
-            const Text("Manual"),
-            Switch(
-              value: control!.isControlledByAI,
-              onChanged:
-                  (val) =>
-                      _updateControl(control!.copyWith(isControlledByAI: val)),
-            ),
-            const Text("AI"),
-          ],
-        ),
+        Text("AI", style: TextStyle(fontSize: 15.sp)),
       ],
     );
   }
 
-  Widget _buildInput(String label, double value, Function(double) onChanged) {
-    final controller = TextEditingController(text: value.toStringAsFixed(1));
+  Widget _buildInputField(String label, TextEditingController controller) {
     return TextField(
       enabled: !control!.isControlledByAI && !isLoading,
       controller: controller,
       decoration: InputDecoration(
         labelText: label,
+        labelStyle: TextStyle(fontSize: 12.sp),
         border: const OutlineInputBorder(),
       ),
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      onSubmitted: (val) => onChanged(double.tryParse(val) ?? value),
     );
   }
 
-  Widget _buildDoseRow(String label, double value, bool isUp) {
-    final controller = TextEditingController(text: value.toStringAsFixed(1));
+  Widget _buildDoseRow(
+    String label,
+    TextEditingController controller,
+    DoseType type,
+  ) {
     return Row(
       children: [
         Expanded(
@@ -200,6 +235,7 @@ class _PHScreenState extends State<PHScreen> {
             controller: controller,
             enabled: !control!.isControlledByAI && !isLoading,
             decoration: InputDecoration(
+              labelStyle: TextStyle(fontSize: 12.sp),
               labelText: label,
               border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -207,16 +243,6 @@ class _PHScreenState extends State<PHScreen> {
               isDense: true,
             ),
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            onChanged: (val) {
-              final parsed = double.tryParse(val) ?? 0;
-              setState(() {
-                if (isUp) {
-                  upDose = parsed;
-                } else {
-                  downDose = parsed;
-                }
-              });
-            },
           ),
         ),
         const SizedBox(width: 12),
@@ -224,11 +250,13 @@ class _PHScreenState extends State<PHScreen> {
           width: 160,
           child: ElevatedButton(
             onPressed:
-                (!control!.isControlledByAI && value > 0 && !isLoading)
-                    ? () =>
-                        _submitDose(isUp ? DoseType.up : DoseType.down, value)
+                (!control!.isControlledByAI && !isLoading)
+                    ? () => _submitDose(type)
                     : null,
-            child: Text('SCHEDULE PH ${isUp ? 'UP' : 'DOWN'}'),
+            child: Text(
+              'SCHEDULE PH ${type == DoseType.up ? 'UP' : 'DOWN'}',
+              style: TextStyle(fontSize: 12.sp),
+            ),
           ),
         ),
       ],

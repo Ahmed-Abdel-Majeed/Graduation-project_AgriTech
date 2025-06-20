@@ -12,7 +12,7 @@ import '../../../../core/utils/snackbar.dart';
 import '../../../../core/utils/custom_button.dart';
 
 class RegisterForm extends StatefulWidget {
-    RegisterForm({super.key});
+    const RegisterForm({super.key});
 
   @override
   State<RegisterForm> createState() => _RegisterFormState();
