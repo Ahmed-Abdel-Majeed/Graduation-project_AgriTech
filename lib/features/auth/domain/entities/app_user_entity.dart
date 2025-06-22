@@ -13,7 +13,6 @@ class AppUserEntity {
     required this.image,
   });
 
-  // ✅ التحويل من كائن إلى JSON
   Map<String, dynamic> toJson() {
     return {
       'token': token,
@@ -24,7 +23,6 @@ class AppUserEntity {
     };
   }
 
-  // ✅ التحويل من JSON إلى كائن
   factory AppUserEntity.fromJson(Map<String, dynamic> json) {
     return AppUserEntity(
       token: json['token'],

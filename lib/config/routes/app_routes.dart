@@ -6,6 +6,7 @@ import 'package:agri/features/chat_bot/screens/chat_screen.dart';
 import 'package:agri/features/farmdashboard/presentation/pages/farm_dashboard.dart';
 import 'package:agri/features/home/presentation/screens/ai_analysis.dart';
 import 'package:agri/features/main/presentation/screens/main_screen.dart';
+import 'package:agri/features/profile/profile_screen.dart';
 import 'package:agri/features/welcome/screens/splash_screen.dart.dart';
 import 'package:agri/features/welcome/screens/welcome_screen.dart';
 import 'package:agri/ui/widgets/home_screen.dart';
@@ -38,6 +39,7 @@ class AppRoutes {
   static const String farmAnalysisDetail = '/farm-analysis/detail';
   static const String plantAnalysisScreen = '/plantAnalysisScreen';
   static const String planScanAi = '/planScanAi';
+  static const String profilePage = '/profilePage';
 
 
 
@@ -72,6 +74,9 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const ChatScreen());
       case aiAnalysis:
         return MaterialPageRoute(builder: (_) => const AiAnalysis());
+              case profilePage:
+        return MaterialPageRoute(builder: (_) => const ProfileScreen());
+
 
 
       default:
