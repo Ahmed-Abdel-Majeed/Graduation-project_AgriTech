@@ -9,7 +9,9 @@ class PlantAnalysisApi {
   Future<AnalysisResults> fetchAnalysisResults() async {
     try {
       _logger.i('Fetching analysis results...');
-      final response = await _dio.get('https://api-testapp.netlify.app/api/farmanalysis/AiDiagnostics');
+      final response = await _dio.get(
+        'https://api-testapp.netlify.app/api/farmanalysis/report',
+      );
       _logger.d('Response data: ${response.data}');
       return AnalysisResults.fromJson(response.data);
     } catch (e, stacktrace) {

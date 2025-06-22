@@ -178,15 +178,7 @@ class _ProfilePageState extends State<ProfilePage> {
         }
       },
       child: Scaffold(
-        appBar: CustomAppBar(
-          imagePath: "assets/images/logo.png",
-          onBackPress: () {
-            context.read<AuthCubit>().signOut();
-          },
-          onBackPressleading: () {
-            Navigator.pushNamed(context, AppRoutes.home);
-          },
-        ),
+        appBar:AppBar(),
         body:
             _isLoading
                 ? const Center(child: CircularProgressIndicator())

@@ -1,4 +1,5 @@
 import 'package:agri/config/routes/app_routes.dart';
+import 'package:agri/core/utils/custom_app_bar.dart';
 import 'package:agri/features/farmdashboard/presentation/pages/history_log_screen.dart';
 import 'package:agri/features/farmdashboard/presentation/widgets/hardware_status.dart';
 import 'package:flutter/material.dart';
@@ -41,15 +42,15 @@ class _MainFarmScreenState extends State<MainFarmScreen> {
     final double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(color: Color.fromARGB(0, 0, 0, 0)),
-        title: Text(
-          "Farm Dashboard",
-          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
-        ),
-      ),
+      appBar: CustomAppBar(
+                imagePath: "assets/images/aichat.png",
+                onBackPress: () {},
+                title: "Farm Dashboard",
+                color: Colors.white,
+              ),
       body: Column(
         children: [
+          SizedBox(height: 10.h,),
           Row(
             children: [
               const SizedBox(width: 8),

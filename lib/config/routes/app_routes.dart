@@ -1,4 +1,4 @@
-import 'package:agri/features/ai_scan_analysis/plan_scan_ai.dart';
+import 'package:agri/features/ai_scan_analysis/plan_scan_ai_screen.dart';
 import 'package:agri/features/plant_analysis/screens/plant_analysis_screen.dart';
 import 'package:agri/features/auth/presentation/pages/login_screen.dart';
 import 'package:agri/features/auth/presentation/pages/register_screen.dart';

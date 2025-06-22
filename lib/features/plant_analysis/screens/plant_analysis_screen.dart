@@ -1,6 +1,7 @@
+import 'package:agri/core/utils/custom_app_bar.dart';
 import 'package:agri/features/plant_analysis/data/models/analysis_results.dart';
 import 'package:agri/features/plant_analysis/widgets/slot_analysis_card.dart';
-import 'package:agri/features/plant_analysis/widgets/slot_analysis_dialog.dart';
+import 'package:agri/features/plant_analysis/screens/slot_analysis_details_screen.dart';
 import 'package:agri/features/plant_analysis/data/services/plant_analysis_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,7 +25,12 @@ class _PlantAnalysisScreenState extends State<PlantAnalysisScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Farm Analysis')),
+      appBar:      CustomAppBar(
+                imagePath: "assets/images/aichat.png",
+                onBackPress: () {},
+                title: "Farm Analysis",
+                color: Colors.white,
+              ),
       body: Padding(
         padding: EdgeInsets.all(16.0.w),
         child: FutureBuilder<AnalysisResults>(
@@ -38,7 +44,10 @@ class _PlantAnalysisScreenState extends State<PlantAnalysisScreen> {
               return const Center(child: Text('No data available'));
             }
 
-            final slots = snapshot.data!.slots;
+            final slots =
+                snapshot.data!.slots
+                    .where((slot) => slot.plantAnalysis != null)
+                    .toList();
 
             return GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -53,9 +62,11 @@ class _PlantAnalysisScreenState extends State<PlantAnalysisScreen> {
                 return SlotAnalysisCard(
                   slot: slot,
                   onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) => SlotAnalysisDialog(slot: slot),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => SlotAnalysisDetailsScreen(slot: slot),
+                      ),
                     );
                   },
                 );

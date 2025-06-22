@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:agri/core/utils/custom_app_bar.dart';
 import 'package:agri/core/utils/report_storage.dart';
 import 'package:agri/features/ai_scan_analysis/plant_analysis_api.dart';
 import 'package:agri/features/ai_scan_analysis/report_list_widget.dart';
@@ -88,11 +89,16 @@ class _PlanScanAiState extends State<PlanScanAi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Plant Analysis')),
+      appBar: CustomAppBar(
+        imagePath: "assets/images/aichat.png",
+        onBackPress: () {},
+        title: "Plant Analysis",
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            SizedBox(height: 22.h,),
             ImagePickerWidget(
               selectedPaths: selectedImages,
               onImagesPicked: _onImagesPicked,

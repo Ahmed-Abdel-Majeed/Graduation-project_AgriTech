@@ -1,3 +1,4 @@
+import 'package:agri/core/utils/custom_app_bar.dart';
 import 'package:agri/features/home/presentation/screens/sensors_dashboard.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,24 +16,13 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:
-          kIsWeb
-              ? null
-              : AppBar(
-                leading: ElevatedButton(
-                  onPressed: () {},
-                  child: Image.asset(
-                    "assets/images/aichat.png",
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                title: const Text('Sensor Dashboard'),
-                iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
-                centerTitle: true,
+         CustomAppBar(
+                imagePath: "assets/images/aichat.png",
+                onBackPress: () {},
+                title: "SensorsDashboard",
+                color: Colors.white,
               ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () => Navigator.pushNamed(context, AppRoutes.chatScreen),
-      //   child: Image.asset("assets/images/aichat.png"),
-      // ),
+
       backgroundColor: Colors.white,
       body: SensorsDashboard(),
     );

@@ -1,4 +1,4 @@
-import 'package:agri/features/ai_scan_analysis/plan_scan_ai.dart';
+import 'package:agri/features/ai_scan_analysis/plan_scan_ai_screen.dart';
 import 'package:agri/features/farmdashboard/presentation/pages/main_farm_screen.dart';
 import 'package:flutter/material.dart';
 
