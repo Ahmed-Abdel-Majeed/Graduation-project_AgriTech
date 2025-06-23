@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:agri/features/auth/presentation/cuibt/auth_cubit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProfileView extends StatelessWidget {
   final Map<String, dynamic> userData;
@@ -60,21 +61,21 @@ class ProfileView extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
-          const CircleAvatar(radius: 60),
-          const SizedBox(height: 20),
+          // const CircleAvatar(radius: 60),
+           SizedBox(height: 40.h),
           _infoCard("Username", userData['username'] ?? "N/A"),
-          const SizedBox(height: 20),
+           SizedBox(height: 20.h),
           _infoCard("Email", userData['email'] ?? "N/A"),
-          const SizedBox(height: 20),
+           SizedBox(height: 20.h),
           _passwordCard(context),
-          const SizedBox(height: 40),
+           SizedBox(height: 40.h),
           ElevatedButton.icon(
             onPressed: () => context.read<AuthCubit>().signOut(),
             icon: const Icon(Icons.delete, color: Colors.white),
             label: const Text("Delete Account"),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              padding:  EdgeInsets.symmetric(horizontal: 30.w, vertical: 15.h),
             ),
           ),
         ],

@@ -7,8 +7,7 @@ part 'app_user_model.g.dart';
 @JsonSerializable()
 class AppUserModel extends AppUserEntity {
   @override
-  final String? token; // ← ضروري علشان يدخل في serialization
-
+  final String? token; 
   AppUserModel({
     required super.id,
     required super.email,
@@ -34,7 +33,7 @@ class AppUserModel extends AppUserEntity {
   @override
   Map<String, dynamic> toJson() {
     final json = _$AppUserModelToJson(this);
-    json['token'] = token; // ← أضف التوكن يدويًا هنا
+    json['token'] = token; 
     debugPrint("Converting AppUserModel to JSON: $json");
     return json;
   }
