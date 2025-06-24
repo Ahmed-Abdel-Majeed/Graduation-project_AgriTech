@@ -273,7 +273,7 @@ AgriTech integrates with the following APIs:
 
 ### Farm Control API
 ```
-Base URL: https://api-testapp.netlify.app/api/farmcontrol
+Base URL: Baseurl/farmcontrol
 Methods: GET, PUT
 ```
 
