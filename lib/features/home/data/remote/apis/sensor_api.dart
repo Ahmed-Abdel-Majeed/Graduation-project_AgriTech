@@ -1,10 +1,11 @@
 // lib/features/sensor/data/remote/sensor_api.dart
+import 'package:agri/core/constant/string.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'sensor_api.g.dart';
 
-@RestApi(baseUrl: "https://api-testapp.netlify.app/api")
+@RestApi(baseUrl: baseUrl)
 abstract class SensorApi {
   factory SensorApi(Dio dio, {String baseUrl}) = _SensorApi;
 

@@ -1,3 +1,4 @@
+import 'package:agri/core/constant/string.dart';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:agri/features/plant_analysis/data/models/analysis_results.dart';
@@ -10,7 +11,7 @@ class PlantAnalysisApi {
     try {
       _logger.i('Fetching analysis results...');
       final response = await _dio.get(
-        'https://api-testapp.netlify.app/api/farmanalysis/report',
+        '$baseUrl/farmanalysis/report',
       );
       _logger.d('Response data: ${response.data}');
       return AnalysisResults.fromJson(response.data);

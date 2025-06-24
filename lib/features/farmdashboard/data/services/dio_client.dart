@@ -1,3 +1,4 @@
+import 'package:agri/core/constant/string.dart';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,7 +26,7 @@ class DioClient {
   );
 
   DioClient._internal() {
-    _dio.options.baseUrl = 'https://api-testapp.netlify.app/api';
+    _dio.options.baseUrl = baseUrl;
     _dio.options.connectTimeout = const Duration(seconds: 10);
     _dio.options.receiveTimeout = const Duration(seconds: 15);
 

@@ -2,7 +2,7 @@ import 'package:agri/features/home/presentation/widgets/ai_insights_section.dart
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../../domain/entities/sensor_reading.dart';
+import '../../data/domain/entities/sensor_reading.dart';
 import '../widgets/top_metrics_row.dart';
 
 class AiAnalysis extends StatefulWidget {

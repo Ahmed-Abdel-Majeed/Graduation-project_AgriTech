@@ -1,10 +1,11 @@
 import 'dart:io';
+import 'package:agri/core/constant/string.dart';
 import 'package:dio/dio.dart';
 
 class PlantAnalysisApi {
   static final Dio _dio = Dio();
   static const String _baseUrl =
-      'https://api-testapp.netlify.app/api/farmanalysis/AiDiagnostics';
+      '$baseUrl/farmanalysis/AiDiagnostics';
 
   /// Uploads multiple image files and returns the report ID.
   static Future<String> uploadImages(List<File> images) async {

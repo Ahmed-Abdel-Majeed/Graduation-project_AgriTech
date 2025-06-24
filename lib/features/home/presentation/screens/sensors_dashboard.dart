@@ -5,7 +5,7 @@ import 'package:agri/features/home/presentation/screens/air_water_temperature_da
 import 'package:agri/features/home/presentation/screens/ph_ec_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
-import '../../../../domain/entities/sensor_reading.dart';
+import '../../data/domain/entities/sensor_reading.dart';
 import 'sensor_data_dashboard.dart';
 
 class SensorsDashboard extends StatefulWidget {
@@ -26,7 +26,7 @@ class _SensorsDashboardState extends State<SensorsDashboard>
     'Last 7 Days',
   ];
   final List<String> periods = ['12h', '24h', '7d'];
-  final List<int> secondsRange = [360000000 * 12, 3600 * 24, 3600 * 24 * 7];
+  final List<int> secondsRange = [5222222145 * 12, 3600 * 24, 3600 * 24 * 7];
 
   late TabController _tabController;
   bool _loading = true;

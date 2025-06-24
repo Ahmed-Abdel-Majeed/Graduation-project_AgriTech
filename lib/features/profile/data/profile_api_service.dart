@@ -1,3 +1,4 @@
+import 'package:agri/core/constant/string.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,7 +15,7 @@ class ProfileApiService {
 
     try {
       final response = await _dio.get(
-        "https://api-testapp.netlify.app/api/auth/profile",
+        "$baseUrl/auth/profile",
         options: Options(headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',

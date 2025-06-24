@@ -1,9 +1,10 @@
+import 'package:agri/core/constant/string.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'auth_api.g.dart';
 
-@RestApi(baseUrl: "https://api-testapp.netlify.app/api")
+@RestApi(baseUrl: baseUrl)
 abstract class AuthApi {
   factory AuthApi(Dio dio, {String baseUrl}) = _AuthApi;
 

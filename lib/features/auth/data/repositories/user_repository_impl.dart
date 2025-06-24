@@ -1,7 +1,7 @@
 // data/repositories/user_repository_impl.dart
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../domain/entities/base_response.dart';
+import '../../../home/data/domain/entities/base_response.dart';
 import '../../domain/entities/app_user_entity.dart';
 import '../api/auth_api.dart';
 import '../model/app_user_model.dart';

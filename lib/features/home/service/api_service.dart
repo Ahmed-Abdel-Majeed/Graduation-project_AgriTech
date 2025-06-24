@@ -1,6 +1,7 @@
 // lib/core/network/api_service.dart
 import 'dart:convert';
 
+import 'package:agri/core/constant/string.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,7 +35,7 @@ ${_prettyPrintJson(options.data)}
 
   Future<Map<String, dynamic>> fetchDashboardData(int rangeInSeconds) async {
     final response = await _dio.get(
-      'https://api-testapp.netlify.app/api/dashboard/home',
+      '$baseUrl/dashboard/home',
       queryParameters: {'trendsRange': rangeInSeconds},
     );
     return response.data;

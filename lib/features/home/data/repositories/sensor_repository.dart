@@ -1,7 +1,7 @@
 import 'package:agri/features/home/data/remote/apis/sensor_api.dart';
 import 'package:dio/dio.dart';
-import '../../../../domain/entities/base_response.dart';
-import '../../../../domain/entities/sensor_data.dart';
+import '../domain/entities/base_response.dart';
+import '../domain/entities/sensor_data.dart';
 
 class SensorRepository {
   final SensorApi sensorApi;

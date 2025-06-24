@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../domain/entities/sensor_reading.dart';
+import '../../data/domain/entities/sensor_reading.dart';
 
 class TopMetricsRow extends StatelessWidget {
   final List<SensorReading> readings;

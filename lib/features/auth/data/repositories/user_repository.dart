@@ -1,4 +1,4 @@
-import 'package:agri/domain/entities/base_response.dart';
+import 'package:agri/features/home/data/domain/entities/base_response.dart';
 import 'package:agri/features/auth/domain/entities/app_user_entity.dart';
 
 abstract class UserRepository {
