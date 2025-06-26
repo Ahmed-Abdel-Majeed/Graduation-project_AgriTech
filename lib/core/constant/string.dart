@@ -1,1 +1,2 @@
-const String baseUrl = "";
+const  String baseUrl =
+    "https://api-testapp.netlify.app/api";

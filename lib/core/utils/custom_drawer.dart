@@ -7,52 +7,65 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      // backgroundColor: Colors.green,
-      child: Column(
-        children: [
-          const SizedBox(height: 50),
+      child: SafeArea(
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            Column(
+              children: [
+                const CircleAvatar(
+                  radius: 50,
+                  backgroundImage: AssetImage("assets/images/logo.png"),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Agri TechX',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const Text(
+                  'Admin',
+                  style: TextStyle(color: Colors.black26, fontSize: 14),
+                ),
+              ],
+            ),
 
-          Column(
-            children: [
-              CircleAvatar(
-                radius: 40,
-                backgroundImage: AssetImage("assets/images/logo.png"),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Agri TechX',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const Text(
-                'Admin',
-                style: TextStyle(color: Colors.black26, fontSize: 14),
-              ),
-            ],
-          ),
+            const SizedBox(height: 30),
 
-          const SizedBox(height: 30),
+            drawerItem(
+              icon: Icons.person,
+              label: 'Profile',
+              onTap: () {
+                Navigator.pop(context); // اغلق الدروار
+                Navigator.pushNamed(context, AppRoutes.profilePage);
+              },
+            ),
+            drawerItem(
+              icon: Icons.info_outline,
+              label: 'About',
+              onTap: () {
+                Navigator.pop(context); // اغلق الدروار
+                Navigator.pushNamed(context, AppRoutes.aboutPage);
+              },
+            ),
 
-          drawerItem(
-            icon: Icons.person,
-            label: 'Profile',
-            onTap: () {
-              Navigator.pushNamed(context, AppRoutes.profilePage);
-            },
-          ),
-          drawerItem(icon: Icons.settings, label: 'Setting', onTap: () {}),
-          drawerItem(icon: Icons.info_outline, label: 'About', onTap: () {}),
+            const SizedBox(height: 30),
 
-          const Spacer(),
+            // بدل Spacer استخدم Expanded إذا فعلاً محتاجه
+            Expanded(child: Container()),
 
-          drawerItem(
-            icon: Icons.logout,
-            label: 'Logout',
-            onTap: () {},
-            color: Colors.red,
-          ),
+            drawerItem(
+              icon: Icons.logout,
+              label: 'Logout',
+              onTap: () {
+                Navigator.pop(context);
+                // Add logout logic here
+              },
+              color: Colors.red,
+            ),
 
-          const SizedBox(height: 20),
-        ],
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }

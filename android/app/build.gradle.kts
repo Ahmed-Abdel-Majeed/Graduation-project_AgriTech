@@ -1,19 +1,22 @@
+import java.util.Properties
+
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(keystorePropertiesFile.inputStream())
+}
+
 plugins {
     id("com.android.application")
-    // START: FlutterFire Configuration
     id("com.google.gms.google-services")
-    // END: FlutterFire Configuration
     id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
 
 android {
     namespace = "com.example.agri"
     compileSdk = flutter.compileSdkVersion
-    // ndkVersion = flutter.ndkVersion
     ndkVersion = "27.0.12077973"
-
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -25,16 +28,41 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.agri"
+        applicationId = "com.ahmedabdalmaged.agritechx"
         minSdk = 23
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
 
+signingConfigs {
+    create("release") {
+        val alias = keystoreProperties["keyAlias"]?.toString()
+        val keyPass = keystoreProperties["keyPassword"]?.toString()
+        val storePath = keystoreProperties["storeFile"]?.toString()
+        val storePass = keystoreProperties["storePassword"]?.toString()
+
+        println("Alias: $alias")
+        println("KeyPass: $keyPass")
+        println("StorePath: $storePath")
+        println("StorePass: $storePass")
+
+        if (alias.isNullOrEmpty() || keyPass.isNullOrEmpty() || storePath.isNullOrEmpty() || storePass.isNullOrEmpty()) {
+            throw GradleException("Keystore properties are not set correctly. Please check key.properties.")
+        }
+
+        keyAlias = alias
+        keyPassword = keyPass
+        storeFile = file(storePath)
+        storePassword = storePass
+    }
+}
+
+
+
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 }

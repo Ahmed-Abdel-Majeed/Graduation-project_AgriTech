@@ -1,3 +1,4 @@
+import 'package:agri/features/About/about_page.dart';
 import 'package:agri/features/ai_scan_analysis/plan_scan_ai_screen.dart';
 import 'package:agri/features/plant_analysis/screens/plant_analysis_screen.dart';
 import 'package:agri/features/auth/presentation/pages/login_screen.dart';
@@ -40,6 +41,7 @@ class AppRoutes {
   static const String plantAnalysisScreen = '/plantAnalysisScreen';
   static const String planScanAi = '/planScanAi';
   static const String profilePage = '/profilePage';
+  static const String aboutPage  = '/aboutPage';
 
 
 
@@ -58,6 +60,9 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const MainScreen());
       case register:
         return MaterialPageRoute(builder: (_) => RegisterScreen());
+              case aboutPage:
+        return MaterialPageRoute(builder: (_) => AboutPage ());
+
   
       case welcome:
         return MaterialPageRoute(builder: (_) => WelcomeScreen());

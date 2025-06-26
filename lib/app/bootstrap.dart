@@ -16,7 +16,7 @@ Future<void> bootstrap() async {
     );
 
     if (!getIt.isRegistered<UserRepository>()) {
-      setupDependencies(); // أو حط check جوه الـ function نفسها
+      setupDependencies(); 
     }
 
     final authService = AuthService(getIt<UserRepository>());
@@ -38,10 +38,5 @@ Future<void> bootstrap() async {
 
 
 
-      // BlocProvider(
-      // create: (context) => PermissionCubit(),
-      // child: const MyApp(initialRoute: AppRoutes.splash)
 
-      
-      
       //     )

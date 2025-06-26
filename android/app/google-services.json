@@ -7,12 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:42040448948:android:5897ef03ab7c37cecd04e1",
+        "mobilesdk_app_id": "1:42040448948:android:bd1d23aabebe992bcd04e1",
         "android_client_info": {
-          "package_name": "com.example.agri"
+          "package_name": "com.ahmedabdalmaged.agritechx"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "42040448948-hb8onlvvgfm5ic4kmap1fa2pmc67gf8a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC2CEE8jP9yeJM1gLGhRaA4yuBZlWQNo4g"
@@ -20,7 +25,49 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "42040448948-hb8onlvvgfm5ic4kmap1fa2pmc67gf8a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:42040448948:android:5897ef03ab7c37cecd04e1",
+        "android_client_info": {
+          "package_name": "com.example.agri"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "42040448948-tvc0e3gv4lidrpinq0utefro9g3gk8uc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.agri",
+            "certificate_hash": "bd74ea4a337976ab6801c220b304522405c795cb"
+          }
+        },
+        {
+          "client_id": "42040448948-hb8onlvvgfm5ic4kmap1fa2pmc67gf8a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2CEE8jP9yeJM1gLGhRaA4yuBZlWQNo4g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "42040448948-hb8onlvvgfm5ic4kmap1fa2pmc67gf8a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

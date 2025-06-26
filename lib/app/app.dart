@@ -24,7 +24,6 @@ class MyApp extends StatelessWidget {
           BlocProvider<AuthCubit>(
             create: (_) => getIt<AuthCubit>(param1: initialUser),
           ),
-          // BlocProvider<SensorCubit>(create: (_) => getIt<SensorCubit>()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
