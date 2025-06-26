@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:agri/config/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -15,7 +16,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.imagePath,
     required this.onBackPress,
     this.onBackPressleading,
-    required this.title, this.color,
+    required this.title,
+    this.color,
   });
 
   @override
@@ -44,7 +46,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: InkWell(
-              onTap: onBackPress,
+              onTap: () {
+                Navigator.pushNamed(context, AppRoutes.chatScreen);
+              },
               child: Image.asset("assets/images/aichat.png"),
             ),
           ),
@@ -70,8 +74,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         //     ),
         //   ),
         // ),
-        title: Text(title,style: TextStyle(fontSize: 15.sp,color: Colors.black,),
-                ),       centerTitle: true,
+        title: Text(
+          title,
+          style: TextStyle(fontSize: 15.sp, color: Colors.black),
+        ),
+        centerTitle: true,
       ),
     );
   }

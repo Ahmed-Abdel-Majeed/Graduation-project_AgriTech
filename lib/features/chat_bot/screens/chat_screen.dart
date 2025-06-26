@@ -1,275 +1,182 @@
+import 'dart:async';
+import 'dart:io';
+import 'package:agri/core/utils/custom_app_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_sound/flutter_sound.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+import '../widgets/chat_bubble.dart';
+import '../models/message_model.dart';
+import '../service/ai_chat_service.dart';
+
+class AiChatScreen extends StatefulWidget {
+  const AiChatScreen({super.key});
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  State<AiChatScreen> createState() => _AiChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
-  final TextEditingController _userInput = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
-
-  static const apiKey = "AIzaSyDh-ciS9qZ42yT4dd74ZoDJxGTPTrV5ek8";
-  // تأكد من استخدام النموذج الصحيح كما فعلت
-  final model = GenerativeModel(model: 'gemini-2.0-flash', apiKey: apiKey);
+class _AiChatScreenState extends State<AiChatScreen> {
+  final TextEditingController _controller = TextEditingController();
   final List<Message> _messages = [];
-  bool _isLoading = false;
+  final AiChatService _chatService = AiChatService();
 
-  Future<void> sendMessage() async {
-    final String message = _userInput.text.trim();
+  late FlutterSoundRecorder _recorder;
+  bool _isSending = false;
+  bool _isRecording = false;
+  bool _isRecorderInitialized = false;
 
-    if (message.isEmpty) return;
+  @override
+  void initState() {
+    super.initState();
+    _initializeRecorder();
+  }
 
-    setState(() {
-      _messages.add(Message(isUser: true, message: message, date: DateTime.now()));
-      _isLoading = true;
-    });
+  Future<void> _initializeRecorder() async {
+    _recorder = FlutterSoundRecorder();
 
-    final List<String> arabicKeywords = [
-      "من صمم التطبيق",
-      "مصمم التطبيق",
-      "من عمل التطبيق",
-      "من قام بتطوير التطبيق",
-      "من الذي برمج التطبيق",
-      "من عمل هذا التطبيق",
-      "من صنع التطبيق",
-      "مصمم هذا التطبيق",
-      "من صمم هذا التطبيق",
-      "مين صمم التطبيق",
-      "مين اللي صمم التطبيق",
-      "مين اللي عمل التطبيق",
-      "من قام بتطوير هذا التطبيق",
-      "من انت",
-    ];
-
-    final List<String> englishKeywords = [
-      "who designed the app",
-      "who made the app",
-      "who created the app",
-      "who developed the app",
-      "who built the app",
-      "who is the app designer",
-      "app creator",
-      "app developer",
-      "who programmed the app",
-      "who created this application",
-      "whos",
-    ];
-
-    if (arabicKeywords.any((keyword) => message.toLowerCase().contains(keyword.toLowerCase())) ||
-        englishKeywords.any((keyword) => message.toLowerCase().contains(keyword.toLowerCase()))) {
-      final bool isArabic = arabicKeywords.any(
-          (keyword) => message.toLowerCase().contains(keyword.toLowerCase()));
-
-      setState(() {
-        _messages.add(Message(
-          isUser: false,
-          message: isArabic
-              ? """
-✨ مرحباً بك! ✨  
-هذه الأداة تم تصميمها وتطويرها بواسطة فريق:  
- AgriTechX  
-⚙️ مهمتنا:  
-- توفير حلول ذكية ومبتكرة لدعم القطاع الزراعي باستخدام التكنولوجيا المتقدمة.  
-
-📞 للتواصل:  
-- رقم الهاتف: +20 123 456 7890  
-- البريد الإلكتروني: info@agritechx.com  
-
-🌐 حساباتنا:  
-- LinkedIn: linkedin.com/in/agritechx  
-- GitHub: github.com/agritechx  
-- Twitter: twitter.com/agritechx  
-
-🚀 نحن سعداء باستخدامك لهذه الأداة!  
-"""
-              : """
-✨ Hello! ✨  
-This tool was proudly designed and developed by:  
- AgriTechX  
-
-⚙️ Our Mission:  
-- Providing smart and innovative solutions to support the agricultural sector using advanced technology.  
-
-📞 Contact Us:  
-- Phone: +201501053538  
-- Email: info@agritechx.com  
-
-🌐 Social Media:  
-- LinkedIn: linkedin.com/in/agritechx  
-- GitHub: github.com/agritechx  
-- Twitter: twitter.com/agritechx  
-
-Thank you for using the tool!
-""",
-          date: DateTime.now(),
-        ));
-        _isLoading = false;
-      });
-
-      _userInput.clear();
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    final micStatus = await Permission.microphone.request();
+    if (micStatus != PermissionStatus.granted) {
+      _showError('يرجى السماح بالوصول إلى الميكروفون');
       return;
     }
 
-    final content = [Content.text(message)];
-    try {
-      final response = await model.generateContent(content);
-      setState(() {
-        _messages.add(Message(
-          isUser: false, 
-          message: response.text ?? "", 
-          date: DateTime.now(),
-        ));
-        _isLoading = false;
-      });
-      _userInput.clear();
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    } catch (e) {
-      print("Error during generateContent: $e");
-      setState(() {
-        _messages.add(Message(
-          isUser: false,
-          message: "عذرًا، حدث خطأ أثناء معالجة الطلب: $e",
-          date: DateTime.now(),
-        ));
-        _isLoading = false;
-      });
-      _userInput.clear();
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    await _recorder.openRecorder();
+    setState(() => _isRecorderInitialized = true);
+  }
+
+  @override
+  void dispose() {
+    if (_isRecorderInitialized) {
+      _recorder.closeRecorder();
     }
+    super.dispose();
+  }
+
+  Future<void> _sendMessage() async {
+    final input = _controller.text.trim();
+    if (input.isEmpty) return;
+
+    setState(() {
+      _messages.add(Message(role: 'user', text: input));
+      _controller.clear();
+      _isSending = true;
+    });
+
+    try {
+      final response = await _chatService.sendText(_messages, input);
+      setState(() => _messages.add(response));
+    } catch (e) {
+      _showError("حدث خطأ أثناء إرسال الرسالة");
+    } finally {
+      setState(() => _isSending = false);
+    }
+  }
+
+Future<void> _startRecording() async {
+  if (!_isRecorderInitialized) return;
+
+  try {
+    final tempDir = await getTemporaryDirectory();
+    final filePath = '${tempDir.path}/audio_record.aac';
+
+    await _recorder.startRecorder(
+      toFile: filePath,
+      codec: Codec.aacADTS,
+      sampleRate: 16000,
+      bitRate: 64000,
+    );
+    setState(() => _isRecording = true);
+  } catch (e) {
+    _showError("تعذر بدء التسجيل الصوتي: ${e.toString()}");
+  }
+}
+
+  Future<void> _stopRecording() async {
+    if (!_isRecorderInitialized) return;
+
+    try {
+      final path = await _recorder.stopRecorder();
+      setState(() => _isRecording = false);
+
+      if (path != null && File(path).existsSync()) {
+        setState(() => _isSending = true);
+
+        final fileBytes = await File(path).readAsBytes();
+        final response = await _chatService.sendAudio(_messages, fileBytes);
+
+        setState(() => _messages.add(response));
+      }
+    } catch (e) {
+      _showError("حدث خطأ أثناء إيقاف التسجيل: ${e.toString()}");
+    } finally {
+      setState(() => _isSending = false);
+    }
+  }
+
+  void _showError(String message) {
+    print(message);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: Colors.red.shade400),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Text("AI Chat", style: TextStyle(color: Colors.white)),
-        elevation: 0,
+        appBar: CustomAppBar(
+        imagePath: "assets/images/aichat.png",
+        onBackPress: () {},
+        title: "🤖 AgriBot",
+        
+      
       ),
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
-              controller: _scrollController,
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(8),
               itemCount: _messages.length,
               itemBuilder: (context, index) {
-                final message = _messages[index];
-                return ChatBubble(
-                  isUser: message.isUser,
-                  message: message.message,
-                  date: DateFormat('HH:mm').format(message.date),
-                );
+                return ChatBubble(message: _messages[index]);
               },
             ),
           ),
-          if (_isLoading)
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Center(
-                child: CircularProgressIndicator(color: Colors.blueAccent),
-              ),
+          if (_isSending) const LinearProgressIndicator(),
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              boxShadow: const [
+                BoxShadow(color: Colors.black12, blurRadius: 4),
+              ],
             ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
+                IconButton(
+                  icon: Icon(_isRecording ? Icons.stop : Icons.mic),
+                  color: _isRecording ? Colors.red : Colors.green[700],
+                  onPressed: _isRecording ? _stopRecording : _startRecording,
+                ),
                 Expanded(
                   child: TextField(
-                    controller: _userInput,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: "Type your message...",
-                      hintStyle: TextStyle(color: Colors.grey.shade500),
-                      filled: true,
-                      fillColor: Colors.grey.shade800,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                        borderSide: BorderSide.none,
-                      ),
+                    controller: _controller,
+                    decoration: const InputDecoration(
+                      hintText: 'اكتب رسالة...',
+                      border: InputBorder.none,
                     ),
+                    onSubmitted: (_) => _sendMessage(),
                   ),
                 ),
-                const SizedBox(width: 8),
-                CircleAvatar(
-                  backgroundColor: Colors.blueAccent,
-                  child: IconButton(
-                    onPressed: sendMessage,
-                    icon: const Icon(Icons.send, color: Colors.white),
-                  ),
+                IconButton(
+                  icon: const Icon(Icons.send),
+                  color: Colors.green[700],
+                  onPressed: _sendMessage,
                 ),
               ],
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class Message {
-  final bool isUser;
-  final String message;
-  final DateTime date;
-
-  Message({required this.isUser, required this.message, required this.date});
-}
-
-/// Widget لتصميم فقاعات الدردشة
-class ChatBubble extends StatelessWidget {
-  final bool isUser;
-  final String message;
-  final String date;
-
-  const ChatBubble({
-    super.key,
-    required this.isUser,
-    required this.message,
-    required this.date,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final textColor = Colors.white;
-    final alignment = isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-      child: Column(
-        crossAxisAlignment: alignment,
-        children: [
-          Text(
-            message,
-            textAlign: isUser ? TextAlign.right : TextAlign.left,
-            style: TextStyle(
-              fontSize: 16,
-              color: textColor,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Row(
-            mainAxisAlignment:
-                isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
-            children: [
-              Text(
-                "$date • ${isUser ? "You" : "AgritechX"}",
-                style: TextStyle(
-                  fontSize: 11,
-                  color: Colors.grey.shade500,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            ],
-          ),
-          const Divider(color: Colors.grey, thickness: 0.2),
         ],
       ),
     );

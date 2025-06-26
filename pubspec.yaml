@@ -39,8 +39,10 @@ dependencies:
   fl_chart: ^0.70.2
   flutter:
     sdk: flutter
+  flutter_animate: ^4.5.2
   flutter_bloc: ^9.1.0
   flutter_screenutil: ^5.9.3
+  flutter_sound: ^9.28.0
   geocoding: ^3.0.0
   geolocator: ^13.0.4
   get_it: ^8.0.3
@@ -52,8 +54,10 @@ dependencies:
   intl: ^0.20.1
   json_annotation: ^4.9.0
   json_serializable: ^6.9.4
+  just_audio: ^0.10.4
   logger: ^2.5.0
   lottie: ^3.3.1
+  markdown_widget: ^2.3.2+8
   mockito: ^5.4.5
   path_provider: ^2.1.5
   permission_handler: ^12.0.0+1
@@ -65,20 +69,20 @@ dependencies:
   screenwise: ^0.0.6
   shared_preferences: ^2.5.3
   shimmer: ^3.0.0
+  speech_to_text: ^7.1.0
   syncfusion_flutter_charts: ^29.1.40
   url_launcher: ^6.3.1
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.14.4
   flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.14.4
 
 flutter_icons:
   android: true
   ios: true
   image_path: "assets/images/logo.png"
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

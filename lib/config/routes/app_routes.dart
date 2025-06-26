@@ -13,7 +13,6 @@ import 'package:agri/features/welcome/screens/welcome_screen.dart';
 import 'package:agri/ui/widgets/home_screen.dart';
 import 'package:flutter/material.dart';
 
-
 class AppRoutes {
   static const String welcome = "/welcome";
   static const String login = "/login";
@@ -35,15 +34,13 @@ class AppRoutes {
   static const String mainFarmScreen = "/mainFarmScreen";
   static const String farmdashboard = "/mainFarmScreen";
   static const String farmAnalysisScreen = "/farmAnalysisScreen";
-    static const String farmAnalysisHome = '/farm-analysis';
+  static const String farmAnalysisHome = '/farm-analysis';
   static const String farmAnalysisSummary = '/farm-analysis/summary';
   static const String farmAnalysisDetail = '/farm-analysis/detail';
   static const String plantAnalysisScreen = '/plantAnalysisScreen';
   static const String planScanAi = '/planScanAi';
   static const String profilePage = '/profilePage';
-  static const String aboutPage  = '/aboutPage';
-
-
+  static const String aboutPage = '/aboutPage';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -60,29 +57,25 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const MainScreen());
       case register:
         return MaterialPageRoute(builder: (_) => RegisterScreen());
-              case aboutPage:
-        return MaterialPageRoute(builder: (_) => AboutPage ());
+      case aboutPage:
+        return MaterialPageRoute(builder: (_) => AboutPage());
 
-  
       case welcome:
         return MaterialPageRoute(builder: (_) => WelcomeScreen());
       case farmdashboard:
         final args = settings.arguments as int;
         return MaterialPageRoute(builder: (_) => FarmDashboard(index: args));
       case planScanAi:
-        
         return MaterialPageRoute(builder: (_) => PlanScanAi());
 
       case plantAnalysisScreen:
         return MaterialPageRoute(builder: (_) => const PlantAnalysisScreen());
       case chatScreen:
-        return MaterialPageRoute(builder: (_) => const ChatScreen());
+        return MaterialPageRoute(builder: (_) => const AiChatScreen());
       case aiAnalysis:
         return MaterialPageRoute(builder: (_) => const AiAnalysis());
-              case profilePage:
+      case profilePage:
         return MaterialPageRoute(builder: (_) => const ProfileScreen());
-
-
 
       default:
         return MaterialPageRoute(
