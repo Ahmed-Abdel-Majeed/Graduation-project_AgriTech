@@ -48,6 +48,13 @@ class PhEcPage extends StatelessWidget {
     );
 
     return SfCartesianChart(
+  zoomPanBehavior: ZoomPanBehavior(
+        enablePanning: true,
+        enablePinching: true, // يسمح بالتكبير عن طريق القرص
+        enableDoubleTapZooming: true, // زوم بالنقر مرتين
+        zoomMode: ZoomMode.x, // فقط على المحور X (الوقت)
+        maximumZoomLevel: 0.01, // يسمح بزوم شديد للتفاصيل الدقيقة
+      ),
       //       trackballBehavior: TrackballBehavior(
       //   enable: true,
       //   activationMode: ActivationMode.singleTap,

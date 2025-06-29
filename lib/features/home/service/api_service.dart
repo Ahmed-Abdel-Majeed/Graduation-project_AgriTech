@@ -38,8 +38,18 @@ ${_prettyPrintJson(options.data)}
       '$baseUrl/dashboard/home',
       queryParameters: {'trendsRange': rangeInSeconds},
     );
+              print('''\n
+━━━━━━━━━━━━━━━━━━ REQUEST ━━━━━━━━━━━━━━━━━━
+
+📦 Body:
+${response.data}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+''');
+
     return response.data;
+    
   }
+  
 
   String _prettyPrintJson(dynamic json) {
     try {

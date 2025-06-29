@@ -27,7 +27,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
   Uint8List? imgPath;
   String? imgName;
-  String _resultMessage = " "; // رسالة النتيجة
+  String _resultMessage = " ";
 
   Future<void> uploadImage(ImageSource source) async {
     try {
@@ -95,45 +95,47 @@ class _RegisterFormState extends State<RegisterForm> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              padding:   EdgeInsets.all(3),
-              decoration:   BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color.fromARGB(255, 251, 232, 232),
-              ),
-              child: Stack(
-                children: [
-                  (imgPath == null)
-                      ? CircleAvatar(
-                        radius: 60,
-                        backgroundColor: Colors.transparent,
-                        child: ClipOval(
-                          child: Image.network(
-                            'https://www.w3schools.com/w3images/avatar2.png',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      )
-                      : ClipOval(
-                        child: Image.memory(
-                          imgPath!,
-                          width: 145.w,
-                          height: 145.h,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                  Positioned(
-                    bottom: -6,
-                    right: -12,
-                    child: IconButton(
-                      icon:   Icon(Icons.add_a_photo),
-                      onPressed: showImageSourceOptions,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-              SizedBox(height: 30.h),
+
+            SizedBox(height: 50.h,) ,
+            // Container(
+            //   padding:   EdgeInsets.all(3),
+            //   decoration:   BoxDecoration(
+            //     shape: BoxShape.circle,
+            //     color: Color.fromARGB(255, 251, 232, 232),
+            //   ),
+            //   child: Stack(
+            //     children: [
+            //       (imgPath == null)
+            //           ? CircleAvatar(
+            //             radius: 60,
+            //             backgroundColor: Colors.transparent,
+            //             child: ClipOval(
+            //               child: Image.network(
+            //                 'https://www.w3schools.com/w3images/avatar2.png',
+            //                 fit: BoxFit.cover,
+            //               ),
+            //             ),
+            //           )
+            //           : ClipOval(
+            //             child: Image.memory(
+            //               imgPath!,
+            //               width: 145.w,
+            //               height: 145.h,
+            //               fit: BoxFit.cover,
+            //             ),
+            //           ),
+            //       Positioned(
+            //         bottom: -6,
+            //         right: -12,
+            //         child: IconButton(
+            //           icon:   Icon(Icons.add_a_photo),
+            //           onPressed: showImageSourceOptions,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            //   SizedBox(height: 30.h),
             _buildTextField(_nameController, 'Full Name', Icons.person),
               SizedBox(height: 20.h),
             _buildTextField(_emailController, 'Email Address', Icons.email),

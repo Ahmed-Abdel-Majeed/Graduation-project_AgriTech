@@ -75,6 +75,7 @@ class AirWaterTemperatureDashboard extends StatelessWidget {
       ),
       tooltipBehavior: TooltipBehavior(enable: true),
       primaryXAxis: DateTimeAxis(
+        
         majorGridLines: MajorGridLines(
           width: 1.5.w,
           color: Colors.grey.withOpacity(0.5),
@@ -106,9 +107,12 @@ class AirWaterTemperatureDashboard extends StatelessWidget {
       ),
       zoomPanBehavior: ZoomPanBehavior(
         enablePanning: true,
-        zoomMode: ZoomMode.x,
-        maximumZoomLevel: 0.2,
+        enablePinching: true, // يسمح بالتكبير عن طريق القرص
+        enableDoubleTapZooming: true, // زوم بالنقر مرتين
+        zoomMode: ZoomMode.x, // فقط على المحور X (الوقت)
+        maximumZoomLevel: 0.01, // يسمح بزوم شديد للتفاصيل الدقيقة
       ),
+
       primaryYAxis: NumericAxis(
         majorGridLines: MajorGridLines(
           width: 1,
@@ -133,7 +137,6 @@ class AirWaterTemperatureDashboard extends StatelessWidget {
             color: const Color(0xffed5565),
             width: 3,
             markerSettings: const MarkerSettings(isVisible: true),
-            
           ),
         if (waterTemperatureData.isNotEmpty)
           LineSeries<SensorDataDashboard, DateTime>(

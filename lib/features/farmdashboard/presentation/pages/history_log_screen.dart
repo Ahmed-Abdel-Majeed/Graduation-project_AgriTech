@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:agri/features/farmdashboard/data/services/farm_api_service.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../domain/models/farm_history_item.dart';
 
@@ -28,11 +30,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
 
-      body: FutureBuilder<List<FarmHistoryItem>>(
+      body: 
+      FutureBuilder<List<FarmHistoryItem>>(
         future: _historyFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return  Center(
+                child: Lottie.asset(
+                  'assets/Animation - 1750348692344.json',
+                  width: 250.w,
+                  height: 250.h,
+                ),
+              );
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {

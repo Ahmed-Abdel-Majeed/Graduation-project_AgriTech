@@ -1,5 +1,7 @@
 import 'package:agri/config/routes/app_routes.dart';
+import 'package:agri/features/welcome/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -56,9 +58,19 @@ class CustomDrawer extends StatelessWidget {
             drawerItem(
               icon: Icons.logout,
               label: 'Logout',
-              onTap: () {
-                Navigator.pop(context);
-                // Add logout logic here
+              onTap: () async {
+                Navigator.pop(context); 
+
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.remove('token');
+
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const WelcomeScreen(),
+                  ),
+                  (route) => false,
+                );
               },
               color: Colors.red,
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RegisterHeader extends StatelessWidget {
   const RegisterHeader({super.key});
@@ -6,8 +7,8 @@ class RegisterHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: const [
-        SizedBox(height: 20),
+      children:  [
+        SizedBox(height: 88.h),
         Text(
           'Create Your Account',
           style: TextStyle(

@@ -1,8 +1,10 @@
+import 'package:agri/core/utils/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:agri/features/farmdashboard/data/services/farm_api_service.dart';
 import 'package:agri/features/farmdashboard/domain/models/ph_control.dart';
 import 'package:agri/features/farmdashboard/domain/models/dose_types.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 
 class PHScreen extends StatefulWidget {
   const PHScreen({super.key});
@@ -120,34 +122,46 @@ class _PHScreenState extends State<PHScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: const Text('pH Control')),
-      body:
+  appBar: CustomAppBar(
+        color: Colors.black,
+        imagePath: "assets/images/aichat.png",
+        onBackPress: () => Navigator.pop(context),
+        title: "pH Control",
+
+        
+      ),       body:
           control == null
-              ? const Center(child: CircularProgressIndicator())
+              ? Center(
+                child: Lottie.asset(
+                  'assets/Animation - 1750348692344.json',
+                  width: 250.w,
+                  height: 250.h,
+                ),
+              )
               : SingleChildScrollView(
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildAIModeSwitch(),
-                    const SizedBox(height: 20),
+                     SizedBox(height: 20.h),
                     const Text(
                       'Set pH Range',
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
-                    const SizedBox(height: 8),
+                     SizedBox(height: 8.h),
                     Row(
                       children: [
                         Expanded(
                           child: _buildInputField("Min pH", minPHController),
                         ),
-                        const SizedBox(width: 16),
+                         SizedBox(width: 16.w),
                         Expanded(
                           child: _buildInputField("Max pH", maxPHController),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
+                     SizedBox(height: 16.h),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -164,28 +178,32 @@ class _PHScreenState extends State<PHScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                     SizedBox(height: 24
+                    .h),
                     const Text(
                       'Manual Dosing',
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
-                    const SizedBox(height: 16),
+                     SizedBox(height: 16
+                    
+                    .h
+                    ),
                     _buildDoseRow(
                       'pH UP Amount (mL)',
                       upDoseController,
                       DoseType.up,
                     ),
-                    const SizedBox(height: 12),
+                     SizedBox(height: 12.h),
                     _buildDoseRow(
                       'pH DOWN Amount (mL)',
                       downDoseController,
                       DoseType.down,
                     ),
-                    const SizedBox(height: 16),
-                    const Text(
+                     SizedBox(height: 16.h),
+                     Text(
                       'Note: Dosing commands are sent to hardware after a 10-minute delay, allowing cancellation.',
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 12.sp,
                         fontStyle: FontStyle.italic,
                         color: Colors.black54,
                       ),

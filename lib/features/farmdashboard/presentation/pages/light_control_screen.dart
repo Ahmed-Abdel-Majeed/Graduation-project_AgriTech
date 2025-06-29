@@ -1,6 +1,9 @@
+import 'package:agri/core/utils/custom_app_bar.dart';
 import 'package:agri/features/farmdashboard/domain/models/light_model.dart';
 import 'package:flutter/material.dart';
 import 'package:agri/features/farmdashboard/data/services/farm_api_service.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 
 class LightSystemControlScreen extends StatefulWidget {
   const LightSystemControlScreen({super.key});
@@ -90,12 +93,24 @@ class _LightSystemControlScreenState extends State<LightSystemControlScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Lights Control')),
-      body:
+  appBar: CustomAppBar(
+        color: Colors.black,
+        imagePath: "assets/images/aichat.png",
+        onBackPress: () => Navigator.pop(context),
+        title: "Lights Control",
+
+        
+      ),       body:
           control == null
-              ? const Center(child: CircularProgressIndicator())
+              ? Center(
+                child: Lottie.asset(
+                  'assets/Animation - 1750348692344.json',
+                  width: 250.w,
+                  height: 250.h,
+                ),
+              )
               : SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
+                padding:  EdgeInsets.all(20.sp),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -133,7 +148,7 @@ class _LightSystemControlScreenState extends State<LightSystemControlScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
+                     SizedBox(height: 16.h),
                     Row(
                       // spacing: ,
                       children: [
@@ -147,7 +162,7 @@ class _LightSystemControlScreenState extends State<LightSystemControlScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 24),
+                     SizedBox(height: 24.h),
                     _buildScheduleBlock(
                       title: 'White Light Schedule',
                       start: control!.whiteLight.startTime,
@@ -155,7 +170,7 @@ class _LightSystemControlScreenState extends State<LightSystemControlScreen> {
                       onPickStart: () => _pickTime('white', true),
                       onPickEnd: () => _pickTime('white', false),
                     ),
-                    const SizedBox(height: 20),
+                     SizedBox(height: 20.h),
                     _buildScheduleBlock(
                       title: 'Red/Blue (Growth) Light Schedule',
                       start: control!.growthLight.startTime,
@@ -185,10 +200,10 @@ class _LightSystemControlScreenState extends State<LightSystemControlScreen> {
 
   Widget _buildStatusChip(String label, bool isOn) {
     return SizedBox(
-      width: 185,
+      width: 170.w,
       child: Chip(
         
-        avatar: const Icon(Icons.warning_amber_rounded, size: 18),
+        avatar:  Icon(Icons.warning_amber_rounded, size: 18.sp),
         label: Text(
           '$label ${isOn ? "ON" : "OFF"}',
           style: TextStyle(
@@ -213,7 +228,7 @@ class _LightSystemControlScreenState extends State<LightSystemControlScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-        const SizedBox(height: 12),
+         SizedBox(height: 12.h),
         Row(
           children: [
             Expanded(
@@ -230,7 +245,7 @@ class _LightSystemControlScreenState extends State<LightSystemControlScreen> {
                 ),
               ),
             ),
-            const SizedBox(width: 12),
+             SizedBox(width: 12.w),
             Expanded(
               child: GestureDetector(
                 onTap: control!.isControlledByAI ? null : onPickEnd,

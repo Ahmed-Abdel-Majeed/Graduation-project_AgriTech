@@ -1,7 +1,9 @@
+import 'package:agri/core/utils/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:agri/features/farmdashboard/data/services/farm_api_service.dart';
 import 'package:agri/features/farmdashboard/domain/models/tds_control.dart';
+import 'package:lottie/lottie.dart';
 
 class TDSScreen extends StatefulWidget {
   const TDSScreen({super.key});
@@ -78,9 +80,21 @@ class _TDSScreenState extends State<TDSScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('TDS Control', style: TextStyle(fontSize: 18.sp))),
-      body: tdsControl == null
-          ? Center(child: CircularProgressIndicator())
+      appBar: CustomAppBar(
+        color: Colors.black,
+        imagePath: "assets/images/aichat.png",
+        onBackPress: () => Navigator.pop(context),
+        title: "TDS Control",
+
+        
+      ),      body: tdsControl == null
+          ? Center(
+                child: Lottie.asset(
+                  'assets/Animation - 1750348692344.json',
+                  width: 250.w,
+                  height: 250.h,
+                ),
+              )
           : SingleChildScrollView(
               padding: EdgeInsets.all(16.w),
               child: AnimatedSwitcher(
@@ -89,7 +103,7 @@ class _TDSScreenState extends State<TDSScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         const Text("Manual"),
                         Switch(

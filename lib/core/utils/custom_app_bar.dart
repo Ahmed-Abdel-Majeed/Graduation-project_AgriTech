@@ -8,16 +8,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String imagePath;
   final String title;
   final VoidCallback onBackPress;
-  final VoidCallback? onBackPressleading;
   final Color? color;
+  final Widget? leading;
 
   const CustomAppBar({
     super.key,
     required this.imagePath,
     required this.onBackPress,
-    this.onBackPressleading,
     required this.title,
-    this.color,
+    this.color, this.leading,
   });
 
   @override
@@ -42,6 +41,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         iconTheme: IconThemeData(color: color),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        leading: leading,
         actions: [
           Padding(
             padding: const EdgeInsets.all(12.0),

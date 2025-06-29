@@ -188,10 +188,10 @@ class _MainFarmScreenState extends State<MainFarmScreen> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white,
-                    image: const DecorationImage(
-                      image: AssetImage('assets/images/history.png'),
-                      fit: BoxFit.cover,
-                    ),
+                    // image: const DecorationImage(
+                    //   image: AssetImage('assets/images/history.png'),
+                    //   fit: BoxFit.cover,
+                    // ),
                   ),
                 ),
                 SizedBox(height: 10.h),

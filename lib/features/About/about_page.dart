@@ -1,3 +1,4 @@
+import 'package:agri/core/utils/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -15,10 +16,14 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("About AgriTech"),
-        centerTitle: true,
-      ),
+      appBar: CustomAppBar(
+        color: Colors.black,
+        imagePath: "assets/images/aichat.png",
+        onBackPress: () => Navigator.pop(context),
+        title: "About AgriTech",
+
+        
+      ), 
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -86,7 +91,7 @@ class AboutPage extends StatelessWidget {
                 GestureDetector(
                   onTap: () => _launchURL("mailto:ahmedabdalmaged2002@yahoo.com"),
                   child: const Text(
-                    "ahmedabdalmaged2002@yahoo.com",
+                    "AgriTechX@yahoo.com",
                     style: TextStyle(
                       color: Colors.blue,
                       decoration: TextDecoration.underline,

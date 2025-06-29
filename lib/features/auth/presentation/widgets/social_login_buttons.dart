@@ -30,30 +30,31 @@ class SocialLoginButtons extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 22),
-        InkWell(
-          onTap: () {
-            // Facebook login
-          },
-          child: Card(
-            elevation: 5,
-            child: Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 60, 87, 186),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(11.0),
-                child: Image.asset(
-                  "assets/facebook.png",
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ),
+        // const SizedBox(width: 22),
+        // InkWell(
+        //   onTap: () {
+        //     // Facebook login
+        //   },
+        //   child: Card(
+        //     elevation: 5,
+        //     child: Container(
+        //       width: 60,
+        //       height: 60,
+        //       decoration: BoxDecoration(
+        //         color: const Color.fromARGB(255, 60, 87, 186),
+        //         borderRadius: BorderRadius.circular(10),
+        //       ),
+        //       child: Padding(
+        //         padding: const EdgeInsets.all(11.0),
+        //         child: Image.asset(
+        //           "assets/facebook.png",
+        //           color: Colors.white,
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+    
       ],
     );
   }

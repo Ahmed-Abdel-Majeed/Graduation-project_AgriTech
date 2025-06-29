@@ -5,20 +5,29 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class SlotAnalysisCard extends StatelessWidget {
   final SlotAnalysis slot;
   final VoidCallback onTap;
+  final bool isTranslated;
+  final Map<String, String> translations;
+  final Map<String, String> staticTranslations;
 
   const SlotAnalysisCard({
     super.key,
     required this.slot,
     required this.onTap,
+    this.isTranslated = false,
+    this.translations = const {},
+    this.staticTranslations = const {},
   });
 
   Color _healthColor(String state) {
     switch (state.toLowerCase()) {
       case 'healthy':
+      case 'صحي':
         return Colors.green;
       case 'poor':
+      case 'ضعيف':
         return Colors.orange;
       case 'critical':
+      case 'حرج':
         return Colors.red;
       default:
         return Colors.grey;
@@ -26,16 +35,43 @@ class SlotAnalysisCard extends StatelessWidget {
   }
 
   String _healthLabel(String state) {
-    switch (state.toLowerCase()) {
-      case 'healthy':
-        return 'Healthy';
-      case 'poor':
-        return 'Poor';
-      case 'critical':
-        return 'Critical';
-      default:
-        return 'Unknown';
+    if (isTranslated) {
+      switch (state.toLowerCase()) {
+        case 'healthy':
+          return 'صحي';
+        case 'poor':
+          return 'ضعيف';
+        case 'critical':
+          return 'حرج';
+        default:
+          return 'غير معروف';
+      }
+    } else {
+      switch (state.toLowerCase()) {
+        case 'healthy':
+          return 'Healthy';
+        case 'poor':
+          return 'Poor';
+        case 'critical':
+          return 'Critical';
+        default:
+          return 'Unknown';
+      }
     }
+  }
+
+  String _getTranslatedText(String originalText) {
+    if (!isTranslated) return originalText;
+    
+    if (staticTranslations.containsKey(originalText)) {
+      return staticTranslations[originalText]!;
+    }
+    
+    if (translations.containsKey(originalText)) {
+      return translations[originalText]!;
+    }
+    
+    return originalText;
   }
 
   @override
@@ -52,7 +88,6 @@ class SlotAnalysisCard extends StatelessWidget {
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
         elevation: 4,
-        // color: Colors.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -76,7 +111,10 @@ class SlotAnalysisCard extends StatelessWidget {
                     children: [
                       Text(
                         ' ${slot.id}',
-                        style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, ),
+                        style: TextStyle(
+                          fontSize: 16.sp, 
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
@@ -88,7 +126,7 @@ class SlotAnalysisCard extends StatelessWidget {
                           padding: const EdgeInsets.all(3.0),
                           child: Text(
                             healthLabel,
-                            style: TextStyle( fontSize: 12.sp),
+                            style: TextStyle(fontSize: 12.sp),
                           ),
                         ),
                       )
@@ -97,20 +135,29 @@ class SlotAnalysisCard extends StatelessWidget {
                   SizedBox(height: 6.h),
                   Row(
                     children: [
-                      Icon(Icons.local_florist, size: 14.sp, ),
+                      Icon(Icons.local_florist, size: 14.sp),
                       SizedBox(width: 4.w),
-                      Text("Species: ${plant.identifiedSpecies}", style: TextStyle(fontSize: 15.sp)),
+                      Text(
+                        "${_getTranslatedText("Species")}: ${_getTranslatedText(plant.identifiedSpecies)}", 
+                        style: TextStyle(fontSize: 15.sp)
+                      ),
                     ],
                   ),
                   Row(
                     children: [
-                      Icon(Icons.emoji_nature, size: 14.sp, ),
+                      Icon(Icons.emoji_nature, size: 14.sp),
                       SizedBox(width: 4.w),
-                      Text("Stage: ${plant.growthStage}", style: TextStyle(fontSize: 15.sp)),
+                      Text(
+                        "${_getTranslatedText("Stage")}: ${_getTranslatedText(plant.growthStage)}", 
+                        style: TextStyle(fontSize: 15.sp)
+                      ),
                     ],
                   ),
                   SizedBox(height: 8.h),
-                  Text("Chlorophyll Estimate: $chlorophyll%", style: TextStyle(fontSize: 15.sp)),
+                  Text(
+                    "${_getTranslatedText("Chlorophyll Estimate")}: $chlorophyll%", 
+                    style: TextStyle(fontSize: 15.sp)
+                  ),
                   SizedBox(height: 4.h),
                   LinearProgressIndicator(
                     value: chlorophyll / 100,
@@ -122,15 +169,30 @@ class SlotAnalysisCard extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Key Issues", style: TextStyle(color: Colors.red[300], fontWeight: FontWeight.bold)),
+                        Text(
+                          _getTranslatedText("Key Issues"), 
+                          style: TextStyle(
+                            color: Colors.red[300], 
+                            fontWeight: FontWeight.bold
+                          )
+                        ),
                         if (plant.diseases.isNotEmpty)
-                          Text("- ${plant.diseases.length} Disease(s)", style: TextStyle(color: Colors.white)),
+                          Text(
+                            "- ${plant.diseases.length} ${_getTranslatedText("Disease(s)")}", 
+                            style: TextStyle(color: Colors.white)
+                          ),
                         if (plant.growthProblems.isNotEmpty)
-                          Text("- Growth Anomaly", style: TextStyle(color: Colors.white)),
+                          Text(
+                            "- ${_getTranslatedText("Growth Anomaly")}", 
+                            style: TextStyle(color: Colors.white)
+                          ),
                       ],
                     )
                   else
-                    Text("No significant issues detected.", style: TextStyle(color: Colors.green[300])),
+                    Text(
+                      _getTranslatedText("No significant issues detected."), 
+                      style: TextStyle(color: Colors.green[300])
+                    ),
                 ],
               ),
             ),
